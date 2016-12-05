@@ -1,5 +1,12 @@
 Configuration for marvin is written in the [configurator](https://hackage.haskell.com/package/configurator) syntax.
 
+The configuration is read-only, aka the program does not alter the config itself.
+However the config is also auto-reload, meaning that the live system can adapt to changes in the config which are made while the system is running.
+
+Therefore it is recommended that scripts using config values do not cache those values if possible, but reread them instead.
+
+Please note that the config refresh interval means that it takes up to a minute until changes to the config are live. 
+
 ## System config
 
 Configuration pertaining to the system itself is stored under the "bot" key.
@@ -20,7 +27,8 @@ bot {
 
 ## Script config
 
-By default each script has access to a configuration stored under `script.<script-id>`.
+Configuration for scripts is automatically scoped.
+Each script has access to a configuration stored under `script.<script-id>` with the functions `getConfigVal` and `requireConfigVal`.
 And of course these scripts can have nested config groups.
 
 ```
@@ -46,7 +54,8 @@ script {
 
 ## Adapter config
 
-Configuration pertaining to a particular adapter is stored under `adapter.<adapter-name>`
+Configuration pertaining to a particular adapter is stored under `adapter.<adapter-name>`.
+The exact nature of the adapter config depends on the adapter itself.
 
 ```
 bot {
