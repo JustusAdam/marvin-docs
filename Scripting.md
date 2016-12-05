@@ -3,7 +3,6 @@ Defining scripts is very easy.
 
 Create a new Haskell source file like "MyScript.hs" and import marvins prelude `Marvin.Prelude`.
 This provides you with all the tools you need to interact with marvin.
-Since marvins prelude overwrites functions from the Haskell prelude you should hide the Haskell Prelude with either `{-# LANGUAGE NoImplicitPrelude #-}` at the top of the file or by using `import Prelude ()`.
 For more information why this is necessary see section [Why no prelude?](#why-no-prelude).
 
 Now you can start to define your script with `defineScript` which produces a script initializer.
