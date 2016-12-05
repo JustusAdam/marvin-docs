@@ -8,7 +8,7 @@ You can do this by running `stack clean` (if you use stack for building) or `cab
 If that didn't fix:
 
 - **For user scripts:** make sure the new script is in the script directory and the file does not start with `.` or `_` (those are ignored by `marvin-pp`). See [marvin-pp](../marvin-pp)
-- **For external scripts:** make sure the script is mentioned in the `external-scripts.json` file. See [external scripts](../external-scripts).
+- **For external scripts:** make sure the script is mentioned in the `external-scripts.json` file. See [external scripts](external-scripts).
 
 ### If you are defining the main script manually
 
