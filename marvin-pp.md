@@ -36,5 +36,5 @@ Output from `marvin-pp --help`:
 | `-h,--help` | Only used for printing the help on the command line |
 | `NAME PATH PATH` | Arguments. Passed by GHC. (irrelevant for user) |
 | `-a,--adapter` | identifier for the adapter to use. If omitted will attempt to read from the config (`--config`) at the `bot.adapter` key. |
-| `-s,--external-scripts` | Point to an alternative file containting [external scripts](../external-scripts) |
-| `-c,--config-location` | Point to an alternate config file. See [config](../configuration) section. (only used for looking up the adapter to use, see `--adapter`) |
+| `-s,--external-scripts` | Point to an alternative file containting [external scripts](external-scripts) |
+| `-c,--config-location` | Point to an alternate config file. See [config](configuration) section. (only used for looking up the adapter to use, see `--adapter`) |

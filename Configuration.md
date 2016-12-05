@@ -23,7 +23,7 @@ bot {
 |-|-|
 | `name` | `"marvin"` | Bot name (for logging and which string `respond` triggers on) |
 | `logging` | `ERROR` | Verbosity of the logging |
-| `adapter` | optional, defaults to `"slack-rtm"` | Adapter to use in he main file. (Only used by preprocesor, see [marvin-pp](../marvin-pp))
+| `adapter` | optional, defaults to `"slack-rtm"` | Adapter to use in he main file. (Only used by preprocesor, see [marvin-pp](marvin-pp))
 
 ## Script config
 

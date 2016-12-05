@@ -59,11 +59,11 @@ script = defineScript
                 ...
 ```
 
-You can find more information on the actual script content in the [scripting](../scripting) section.
+You can find more information on the actual script content in the [scripting](scripting) section.
 
 ## The main file
 
-This file (ususally called `Main.hs`) ties the scripts together and defines the [adapter](../adapters) which your marvin project uses.
+This file (ususally called `Main.hs`) ties the scripts together and defines the [adapter](adapters) which your marvin project uses.
 
 *If you use the initializer `marvin-init` the main file will already be defined for you and registered in the `.cabal` file.*
 
