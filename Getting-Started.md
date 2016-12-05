@@ -65,7 +65,10 @@ You can find more information on the actual script content in the [scripting](..
 
 This file (ususally called `Main.hs`) ties the scripts together and defines the [adapter](../adapters) which your marvin project uses.
 
-The main file looks someting like this:
+*If you use the initializer `marvin-init` the main file will already be defined for you and registered in the `.cabal` file.*
+
+The file must be a Haskell source file i.e. end with `.hs` and be mentioned in the `main-is` section of your `.cabal` file.
+It will look someting like this:
 
 ```Haskell
 -- import marvin runner
@@ -92,5 +95,7 @@ To make this easier Marvin includes a utility which allows you to let the main f
 `marvin-pp` creates the main file dynamically at compile time by scanning your project for scripts.
 You can add external scripts by adding an `external-scripts.json` file and `marvin-pp` will add those to your main file then.
 
-**Important**: The `marvin-pp` generator is a compile time preprocessor and thus its output is often cached by your build system. As a result you have to run `cabal clean` or `stack clean` after you added a new script or removed one to force the build system to regenerate the main file.
+To use `marvin-pp` simply add an empty main file, except for this line: `{-# OPTIONS_GHC -F -pgmF marvin-pp -optF --adapter -optF slack-rtm #-}` (this is what `marvin-init` does as well).
+
+**Important**: The `marvin-pp` generator is a compile time preprocessor and thus its output is often cached by your build system. As a result you have to run `cabal clean` or `stack clean` after you added or removed a script to force the build system to regenerate the main file.
 
