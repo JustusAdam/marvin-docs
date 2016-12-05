@@ -8,7 +8,6 @@ If you are new to marvin you may want to get started with the [installation inst
 ## A quick snippet of code
 
 ```Haskell
-{-# LANGUAGE NoImplicitPrelude #-}
 module MyScript where
 
 import Marvin.Prelude
@@ -18,19 +17,19 @@ script = defineScript "my-script" $ do
     hear "I|i can't stand this (\w+)" $ do
         match <- getMatch
 
-        let thing = match `indexEx` 1
+        let thing = match !! 1
 
         reply $ "I'm sorry to tell you but you'll have to do " ++ thing
     
     respond "open the (\w+) door" $ do
         match <- getMatch
-        let door = match `indexEx` 1
+        let door = match !! 1
         openDoor door
-        send $ format "Door {} opened" [door]
+        send $ printf "Door %s opened" door
     
     respond "what is in file (\w+)" $ do
         match <- getMatch 
-        let file = match `indexEx` 1
+        let file = match !! 1
 
         liftIO $ readFile file
 
