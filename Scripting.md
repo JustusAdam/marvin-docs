@@ -39,6 +39,8 @@ The id string is used fo two things
 1. Scoping the config, i.e. the config for this script will be stored in the `scripts.<id-string>` key.
 2. Logging. All logging messages from this script will be prefixed with `scripts.<id-string>`.
 
+Usually the id string is some variation on the name of the script file and module.
+
 The initializer block is where the actual scripting starts.
 
 ## The initializer block
