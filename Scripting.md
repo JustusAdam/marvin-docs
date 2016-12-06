@@ -41,8 +41,20 @@ The id string is used fo two things
 
 The initializer block is where the actual scripting starts.
 
-## Scripting
+## The initializer block
 
+The initializer block is the code that is run when you start marvin.
 
+First and foremost this block is used to add new [reactions](#reacting) to your marvin script, which is most likely the main part of your scripts funcitonality.
+
+But you can do a variety of other things here such as [define periodic tasks](#periodic-tasks), [read-data](#on-disk) and [define mutable variables](#in-memory).
+
+## Reacting
+
+## Persistence
+
+### In memory
+
+### On disk
 
 ## Data sharing
