@@ -1,32 +1,48 @@
+Each script in marvin is a Haskell module that defines a value `script` with the type `ScriptInit`.
+It does not matter where in the module you define this value, only that it sits at the top level so that the main file can import it.
+You can define arbitrary other values in the top level of your script, such as mutable variables and you can import any Haskell library you like including other marvin scripts (for [data sharing](#data-sharing)).
 
-Defining scripts is very easy.
+## Script boilerplate
 
-Create a new Haskell source file like "MyScript.hs" and import marvins prelude `Marvin.Prelude`.
-This provides you with all the tools you need to interact with marvin.
+Since each script is a Haskell module the module name and the file name must match. 
+I.e. a script module MyScript must be in a file called `MyScript.hs`.
+Furthermore the module and file name may only contain word characters and the underscore `_` and must begin with an upper case letter.
 
-Now you can start to define your script with `defineScript` which produces a script initializer.
-If you wish to use marvins automatic script discovery your script initializer should be named `script`  
+**Note:** A file which starts with an underscore `_` or dot `.` is ignored by the automatic script discovery of the main file.
+This is a way to hide unfinished scripts from being included in the program.  
+
+When you have created your source file you should first import marvins prelude `Marvin.Prelude` (something like marvins standard library).
+It contains all the marvin related functions you will need.
+
+*Aside:* You dont have to use `Marvin.Prelude`. The prelude is just a collection of other modules, you can also import just the ones you need directly, but this is only recommended for people experienced with Haskell.
 
 ```Haskell
-{-# LANGUAGE NoImplicitPrelude #-}
-module MyScript where
+-- File: MyScript.hs
+module MyScript where -- Module definition (must match filename)
 
+-- import the prelude
 import Marvin.Prelude
+
+-- import other modules and libraries you need
 
 script :: IsAdapter a => ScriptInit a
 script = defineScript "my-script" $ do
-    ...
+    -- here follows the actual scripting part
 ```
 
-The script id, "my-script" in this case, is the name used for this script when repoting loggin messages as well as the key for this scripts configuration, see [configuration](configuration).
+Lastly we define a value called `script` with the type signature `IsAdapter a => ScriptInit a`.
+This complicated looking type signature ensures our script will work with any adapter that satisfies the adapter type class (adapter interface).
+Here we call the function `defineScript` which takes an id string and an initializer block.
 
-In the define script block you can have marvin react to certain events with `hear` and `respond`.
-More information on those in the section [reacting](#reacting)
+The id string is used fo two things
 
-Finally after you have defined your scripts you have to tie them together.
-You can do this manually or you can have marvin create the boilerplate code for you.
+1. Scoping the config, i.e. the config for this script will be stored in the `scripts.<id-string>` key.
+2. Logging. All logging messages from this script will be prefixed with `scripts.<id-string>`.
 
-To do this simply place a main file (this is the file you'll be compiling later) in the same directory the scripts are placed in.
-Leave the file empty except for this line at the top `{-# OPTIONS_GHC -F -pgmF marvin-pp #-}`.
-When you compile the file marvin will look for any other ".hs" and ".lhs" files in the same directory, import them and define a server which runs with the `script` from each.
-If you wish to hide a file from the auto discovery either place it in a different directory or prefix it with "." or "_".
+The initializer block is where the actual scripting starts.
+
+## Scripting
+
+
+
+## Data sharing
