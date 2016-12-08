@@ -1,0 +1,12 @@
+- [Home](home)
+- [Getting started](getting-started)
+- The bot
+    - [Configuration](configuration)
+    - [Adapters](adapters)
+    - [The main file preprocessor](marvin-pp)
+- Scripts
+    - [Scripting](scripting)
+    - [External Scripts](external-scripts)
+- Misc
+    - [Strings](strings)
+- [FAQ](faq)
