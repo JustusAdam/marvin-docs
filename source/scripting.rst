@@ -70,6 +70,131 @@ But you can do a variety of other things here such as :ref:`define periodic task
 Reacting
 --------
 
+.. _reaction monad:
+
+The reaction Monad
+^^^^^^^^^^^^^^^^^^
+
+Reaction functions
+^^^^^^^^^^^^^^^^^^
+
+There are several functions for reacting to some event happening in you chat application.
+The type of reaction influences the kind of data available in the reaction handler.
+
+The basic structure of a reaction is ``<reaction-type> <matcher> <handler>``.
+
+``<reaction-type>``
+    Is one of the reaction functions, like :ref:```hear`` <fn-hear>` or :ref:```respond`` <fn-respond>` (more are to follow).
+
+    This also determines the type of data available in the handler.
+
+``<matcher>``
+    Is some selection criterium for which events you wish to handle, and also often influences the contents of the data available to the handler.
+
+    For instance for :ref:```hear`` <fn-hear>` and :ref:```respond`` <fn-respond>` this is a regex.
+    The message will only be handled if the regex matches, and the result of the match, as well as the original message is available to the handler later.
+
+``<handler>``
+    Arbitrary code which runs whenever a matched event occurs.
+
+    Has access to message specific data (like a regex match of the message).
+    Can communicate with the chat (send messages to people or channels).
+
+
+There are currently three reaction functions available:
+
+.. _fn-hear:
+
+``hear``
+""""""""
+
+::
+
+    hear :: Regex -> BotReacting a MessageReactionData () -> ScriptDefinition a ()
+    hear regex handler = ...
+
+``hear`` triggers on any message posted which matches the :ref:`regular expression <regex>`.
+The type of Handler is ``BotReacting a MessageReactionData ()``, which means in addition to the :ref`normal reaction capabilities <reaction monad>` it has access to the full message with the :ref:```getMessage`` <fn-getMessage>` function and to the regex match with :ref:```getMatch`` <fn-getMatch>`.
+
+Since this is a reaction to a message we additionally have can use the :ref:```send`` <fn-send>` function in this handler to post a message to the same channel the triggering message was posted to and also the :ref:```reply`` <fn-reply>` function to send a message to the sender of the original message (also posted to the same channel).
+
+.. _fn-respond:
+
+``respond``
+"""""""""""
+
+::
+    respond :: Regex -> BotReacting a MessageReactionData () -> ScriptDefinition a ()
+    respond regex handler = ...
+
+.. todo:: At some point this needs to support derivations of the name. Maybe make that configurable?
+
+``respond`` triggers only on messages which are directed at the bot itself, i.e. the message starts with the name of the bot.
+The *rest* of the message is matched against the provided :ref:`regular expression <regex>` like in :ref:```hear`` <fn-hear>`.
+
+As with :ref:```hear`` <fn-hear>` the match and message are available during handler execution via :ref:```getMatch`` <fn-getMatch>` and :ref:```getMessage`` <fn-getMessage>`.
+
+
+Functions for Handlers
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. _fn-getMatch:
+
+``getMatch``
+""""""""""""
+
+::
+
+    getMatch :: HasMatch m => BotReacting a m Match
+
+Retrieves the result of a regex match inside a handler monad whos state supports it.
+Examples are the handlers for :ref:```hear`` <fn-hear>` and :ref:```respond`` <fn-respond>`.
+
+:ref:`Regex matches <regex match>` are a list of strings. The 0'th index is the full match, the following indexes are matched groups.
+
+.. _fn-getMessage:
+
+``getMessage``
+""""""""""""""
+
+::
+
+    getMessage :: HasMessage m => BotReacting a m Message
+
+Retrieves the :ref:```Message`` <type-Message>` structure for the message this handler is reacting to inside a handler monad whos state supports it.
+Examples are the handlers for :ref:```hear`` <fn-hear>` and :ref:```respond`` <fn-respond>`.
+
+
+.. _fn-send:
+
+``send``
+""""""""
+
+.. _fn-reply:
+
+``reply``
+"""""""""
+
+
+Types for Handlers
+^^^^^^^^^^^^^^^^^^
+
+.. _type-Message:
+
+``Message`` data type
+"""""""""""""""""""""
+
+:: 
+
+    data Message = Message
+        { sender    :: User
+        , channel   :: Channel
+        , content   :: String
+        , timestamp :: TimeStamp
+        }
+
+Represents the information associated with a chat message that was posted.
+
 
 Persistence
 -----------

@@ -24,6 +24,7 @@ Arguments to ``marvin-pp``
 Output from ``marvin-pp --help``:
 
 .. note:: The order of options is irrelevant.
+
 ::
 
     marvin-pp ~ the marvin preprocessor

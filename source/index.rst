@@ -55,7 +55,9 @@ Contents:
    adapters
    configuration
    external-scripts
+   regex
    strings
+   lenses
    faq
 
 
