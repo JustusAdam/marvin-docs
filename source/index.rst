@@ -6,7 +6,7 @@
 Welcome to marvin's documentation!
 ==================================
 
-Marvin is a Haskell framework for creating chat bots, inspired by `Hubot <https://hubot.github.com>`.
+Marvin is a Haskell framework for creating chat bots, inspired by `Hubot <https://hubot.github.com>`_.
 Marvin aims to recreate the ease of use and straightforward API of Hubot, and combine it with the safety guarantees and purity of Haskell and the higher efficiency.
 
 If you are new to marvin you may want to begin with the :ref:`getting started` section or the :ref:`how to script with marvin <scripting>` section to get a sense of how scripting works with marvin.

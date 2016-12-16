@@ -18,7 +18,7 @@ I.e. a script module MyScript must be in a file called ``MyScript.hs``.
 Furthermore the module and file name may only contain word characters and the underscore ``_`` and must begin with an upper case letter.
 
 .. note:: 
-    A file which starts with an underscore ``_` or dot ``.`` is ignored by the automatic script discovery of the main file.
+    A file which starts with an underscore ``_`` or dot ``.`` is ignored by the automatic script discovery of the main file.
     This is a way to hide unfinished scripts from being included in the program.  
 
 When you have created your source file you should first import marvins prelude ``Marvin.Prelude`` (something like marvins standard library).
@@ -26,7 +26,7 @@ It contains all the marvin related functions you will need.
 
 .. hint:: 
     You dont *have* to use ``Marvin.Prelude``. 
-    The prelude is just a convenient collection of other modules, you can also import just the ones you need directly, but this is only recommended for people experienced with Haskell.
+    The prelude is just a convenient `collection of other modules <https://hackage.haskell.org/package/marvin-0.0.3/Marvin-Prelude.html>`_, you can also import just the ones you need directly, but this is only recommended for people experienced with Haskell.
 
 ::
 
@@ -61,7 +61,7 @@ The initializer block
 
 The initializer block is the code that is run when you start marvin.
 
-First and foremost this block is used to add new :ref:`reactions <reacting>` to your marvin script, which is most likely the main part of your scripts funcitonality.
+First and foremost this block is used to add new :ref:`reactions <reacting>` to your marvin script, which is most likely the main part of your scripts functionality.
 
 But you can do a variety of other things here such as :ref:`define periodic tasks <periodic tasks>`, :ref:`read data <persistence on disc>` and :ref:`define mutable variables <persistence in memory>` for state tracking or data sharing.
 
@@ -84,14 +84,14 @@ The type of reaction influences the kind of data available in the reaction handl
 The basic structure of a reaction is ``<reaction-type> <matcher> <handler>``.
 
 ``<reaction-type>``
-    Is one of the reaction functions, like :ref:```hear`` <fn-hear>` or :ref:```respond`` <fn-respond>` (more are to follow).
+    Is one of the reaction functions, like :ref:`hear <fn-hear>` or :ref:`respond <fn-respond>` (more are to follow).
 
     This also determines the type of data available in the handler.
 
 ``<matcher>``
     Is some selection criterium for which events you wish to handle, and also often influences the contents of the data available to the handler.
 
-    For instance for :ref:```hear`` <fn-hear>` and :ref:```respond`` <fn-respond>` this is a regex.
+    For instance for :ref:`hear <fn-hear>` and :ref:`respond <fn-respond>` this is a regex.
     The message will only be handled if the regex matches, and the result of the match, as well as the original message is available to the handler later.
 
 ``<handler>``
@@ -114,9 +114,9 @@ There are currently three reaction functions available:
     hear regex handler = ...
 
 ``hear`` triggers on any message posted which matches the :ref:`regular expression <regex>`.
-The type of Handler is ``BotReacting a MessageReactionData ()``, which means in addition to the :ref`normal reaction capabilities <reaction monad>` it has access to the full message with the :ref:```getMessage`` <fn-getMessage>` function and to the regex match with :ref:```getMatch`` <fn-getMatch>`.
+The type of Handler is ``BotReacting a MessageReactionData ()``, which means in addition to the :ref`normal reaction capabilities <reaction monad>` it has access to the full message with the :ref:`getMessage <fn-getMessage>` function and to the regex match with :ref:`getMatch <fn-getMatch>`.
 
-Since this is a reaction to a message we additionally have can use the :ref:```send`` <fn-send>` function in this handler to post a message to the same channel the triggering message was posted to and also the :ref:```reply`` <fn-reply>` function to send a message to the sender of the original message (also posted to the same channel).
+Since this is a reaction to a message we additionally have can use the :ref:`send <fn-send>` function in this handler to post a message to the same channel the triggering message was posted to and also the :ref:`reply <fn-reply>` function to send a message to the sender of the original message (also posted to the same channel).
 
 .. _fn-respond:
 
@@ -124,15 +124,16 @@ Since this is a reaction to a message we additionally have can use the :ref:```s
 """""""""""
 
 ::
+
     respond :: Regex -> BotReacting a MessageReactionData () -> ScriptDefinition a ()
     respond regex handler = ...
 
 .. todo:: At some point this needs to support derivations of the name. Maybe make that configurable?
 
 ``respond`` triggers only on messages which are directed at the bot itself, i.e. the message starts with the name of the bot.
-The *rest* of the message is matched against the provided :ref:`regular expression <regex>` like in :ref:```hear`` <fn-hear>`.
+The *rest* of the message is matched against the provided :ref:`regular expression <regex>` like in :ref:`hear <fn-hear>`.
 
-As with :ref:```hear`` <fn-hear>` the match and message are available during handler execution via :ref:```getMatch`` <fn-getMatch>` and :ref:```getMessage`` <fn-getMessage>`.
+As with :ref:`hear <fn-hear>` the match and message are available during handler execution via :ref:`getMatch <fn-getMatch>` and :ref:`getMessage <fn-getMessage>`.
 
 
 Functions for Handlers
@@ -140,40 +141,64 @@ Functions for Handlers
 
 .. _fn-getMatch:
 
-``getMatch``
-""""""""""""
+The ``getMatch`` function
+"""""""""""""""""""""""""
 
 ::
 
     getMatch :: HasMatch m => BotReacting a m Match
 
 Retrieves the result of a regex match inside a handler monad whos state supports it.
-Examples are the handlers for :ref:```hear`` <fn-hear>` and :ref:```respond`` <fn-respond>`.
+Examples are the handlers for :ref:`hear <fn-hear>` and :ref:`respond <fn-respond>`.
 
 :ref:`Regex matches <regex match>` are a list of strings. The 0'th index is the full match, the following indexes are matched groups.
 
 .. _fn-getMessage:
 
-``getMessage``
-""""""""""""""
+The ``getMessage`` function
+"""""""""""""""""""""""""""
 
 ::
 
     getMessage :: HasMessage m => BotReacting a m Message
 
-Retrieves the :ref:```Message`` <type-Message>` structure for the message this handler is reacting to inside a handler monad whos state supports it.
-Examples are the handlers for :ref:```hear`` <fn-hear>` and :ref:```respond`` <fn-respond>`.
+Retrieves the :ref:`respond <fn-respond>` structure for the message this handler is reacting to inside a handler monad whos state supports it.
+Examples are the handlers for :ref:`hear <fn-hear>` and :ref:`respond <fn-respond>`.
 
 
 .. _fn-send:
 
-``send``
-""""""""
+The ``send`` function
+"""""""""""""""""""""
+
+::
+
+    send :: (IsAdapter a, HasMessage m) => String -> BotReacting a m ()
+    send msg = ...
+
+The ``send``function is used to post messages to the same channel to which the message that triggered this handler was posted to.
+
+
+Explanation of the type signature:
+
+``IsAdapter a``
+    We require the saved ``a`` in ``BotReacting`` to be an adapter. 
+    This means this function actually interacts with the chat service (sends a message in this case).
+
+``HasMessage m`` 
+    The data in the monad must have a ``Message``in it somewhere, from which we can find the channel it was posted to.
 
 .. _fn-reply:
 
-``reply``
-"""""""""
+The ``reply`` function 
+""""""""""""""""""""""
+
+::
+
+    reply :: (IsAdapter a, HasMessage m) => String -> BotReacting a m ()
+    reply msg = ...
+
+Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the original message came from, but it also references the author of the original message.
 
 
 Types for Handlers
@@ -181,8 +206,8 @@ Types for Handlers
 
 .. _type-Message:
 
-``Message`` data type
-"""""""""""""""""""""
+The ``Message`` data type
+"""""""""""""""""""""""""
 
 :: 
 
