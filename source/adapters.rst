@@ -17,6 +17,4 @@ The capabilties required of an adapter is defined via the typeclass ``IsAdapter`
 Currently only one adapter is defined, which uses the the slack real time messaging api.
 A planned next adapter will be using the push notifications of the slack api.
 
-Users can define their own adapters of course but are strongly encouraged to release generic adapters publicly or `contribute them to marvin`_.
-
-.. _contribute them to marvin: https://github.com/JustusAdam/marvin/pulls
+Users can define their own adapters of course but are strongly encouraged to release generic adapters publicly or `contribute them to marvin <https://github.com/JustusAdam/marvin/pulls>`_.

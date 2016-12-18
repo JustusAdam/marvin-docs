@@ -22,10 +22,10 @@ To see the options of the initializer run ``marvin-init --help`` on your command
 Installing marvin
 -----------------
 
-You can get a release version of marvin on `Hackage <https://hackage.haskell.org/package/marvin>`
+You can get a release version of marvin on `Hackage <https://hackage.haskell.org/package/marvin>`_
 
 However this library is still a very early stage so you might want to get updates quicker. 
-You can do so by using `stack <https://docs.haskellstack.org>` and adding a recent commit of this repository to your ``stack.yaml`` file.
+You can do so by using `stack <https://docs.haskellstack.org>`_ and adding a recent commit of this repository to your ``stack.yaml`` file.
 Stack will take care of downloading and building it for you.
 
 Your ``stack.yaml`` should include a section like this:
