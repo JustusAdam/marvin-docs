@@ -101,7 +101,8 @@ The basic structure of a reaction is ``<reaction-type> <matcher> <handler>``.
     Can communicate with the chat (send messages to people or channels).
 
 
-There are currently three reaction functions available:
+There are currently nine reaction functions available:
+
 
 .. _fn-hear:
 
@@ -117,6 +118,7 @@ There are currently three reaction functions available:
 The type of Handler is ``BotReacting a MessageReactionData ()``, which means in addition to the :ref`normal reaction capabilities <reaction monad>` it has access to the full message with the :ref:`getMessage <fn-getMessage>` function and to the regex match with :ref:`getMatch <fn-getMatch>`.
 
 Since this is a reaction to a message we additionally have can use the :ref:`send <fn-send>` function in this handler to post a message to the same channel the triggering message was posted to and also the :ref:`reply <fn-reply>` function to send a message to the sender of the original message (also posted to the same channel).
+
 
 .. _fn-respond:
 
@@ -136,8 +138,143 @@ The *rest* of the message is matched against the provided :ref:`regular expressi
 As with :ref:`hear <fn-hear>` the match and message are available during handler execution via :ref:`getMatch <fn-getMatch>` and :ref:`getMessage <fn-getMessage>`.
 
 
+.. _fn-topic:
+
+``topic``
+"""""""""
+
+::
+
+    topic :: BotReacting a (String, Channel) () -> ScriptDefinition a ()
+    topic handler = ...
+
+``topic`` triggers whenever the topic in a channel which the bot is subscribed to changes.
+
+The new topic is available via :ref:`getTopic <fn-getTopic>`
+
+The channel in which the topic was changed is available via the :ref:`getChannel <fn-getChannel>` function.
+
+
+.. _fn-topicIn:
+
+``topicIn``
+"""""""""""
+
+:: 
+
+    topicIn :: String -> BotReacting a String () -> ScriptDefinition a ()
+    topicIn channelName handler = ...
+
+``topicIn`` triggers whenever the topic changes in the channel with the human readable ``channelName``.
+
+As with :ref:`topic <fn-topic>` the new topic is available via :ref:`getTopic <fn-getTopic>`.
+
+
+.. _fn-enter:
+
+``enter``
+"""""""""
+
+::
+
+    enter :: BotReacting a (String, Channel) () -> ScriptDefinition a ()
+    enter handler = ...
+
+``enter`` triggers whenever a user enters in a channel which the bot is subscribed to.
+
+The entering user is available via :ref:`getUser <fn-getUser>`
+
+The channel in which user entered is available via the :ref:`getChannel <fn-getChannel>` function.
+
+
+.. _fn-enterIn:
+
+``enterIn``
+"""""""""""
+
+:: 
+
+    enterIn :: String -> BotReacting a String () -> ScriptDefinition a ()
+    enterIn channelName handler = ...
+
+``enterIn`` triggers whenever the a user enters the channel with the human readable ``channelName``.
+
+As with :ref:`enter <fn-enter>` the new enter is available via :ref:`getUser <fn-getUser>`.
+
+
+.. _fn-exit:
+
+``exit``
+"""""""""
+
+::
+
+    exit :: BotReacting a (String, Channel) () -> ScriptDefinition a ()
+    exit handler = ...
+
+``exit`` triggers whenever a user exits a channel which the bot is subscribed to.
+
+The exiting user is available via :ref:`getUser <fn-getUser>`
+
+The channel from which user exited is available via the :ref:`getChannel <fn-getChannel>` function.
+
+
+.. _fn-exitIn:
+
+``exitFrom``
+"""""""""""
+
+:: 
+
+    exitFrom :: String -> BotReacting a String () -> ScriptDefinition a ()
+    exitFrom channelName handler = ...
+
+``exitFrom`` triggers whenever a user exits the channel with the human readable ``channelName``.
+
+As with :ref:`exit <fn-exit>` the exiting user is available via :ref:`getUser <fn-getUser>`.
+
+
+
 Functions for Handlers
 ^^^^^^^^^^^^^^^^^^^^^^
+
+.. _fn-send:
+
+The ``send`` function
+"""""""""""""""""""""
+
+::
+
+    send :: (IsAdapter a, HasChannel m) => String -> BotReacting a m ()
+    send msg = ...
+
+The ``send`` function is used to post messages to the same channel from which the event that triggered the handler came.
+
+
+Explanation of the type signature:
+
+``IsAdapter a``
+    We require the saved ``a`` in ``BotReacting`` to be an adapter. 
+    This means this function actually interacts with the chat service (sends a message in this case).
+
+``HasChannel m`` 
+    The data in the monad must have an originating ``Channel`` in it somewhere to which the message will be posted.
+
+.. _fn-reply:
+
+The ``reply`` function 
+""""""""""""""""""""""
+
+::
+
+    reply :: (IsAdapter a, HasMessage m) => String -> BotReacting a m ()
+    reply msg = ...
+
+Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the original message came from, but it also references the author of the original message.
+
+We require ``HasMessage`` here, because we need some sender to reply to.
+Since the :ref:`Message <type-Message>` already contains a ``Channel``, we don't need ``HasChannel``.
+
 
 .. _fn-getMatch:
 
@@ -153,6 +290,7 @@ Examples are the handlers for :ref:`hear <fn-hear>` and :ref:`respond <fn-respon
 
 :ref:`Regex matches <regex match>` are a list of strings. The 0'th index is the full match, the following indexes are matched groups.
 
+
 .. _fn-getMessage:
 
 The ``getMessage`` function
@@ -166,39 +304,36 @@ Retrieves the :ref:`respond <fn-respond>` structure for the message this handler
 Examples are the handlers for :ref:`hear <fn-hear>` and :ref:`respond <fn-respond>`.
 
 
-.. _fn-send:
+.. _fn-getTopic:
 
-The ``send`` function
-"""""""""""""""""""""
-
-::
-
-    send :: (IsAdapter a, HasMessage m) => String -> BotReacting a m ()
-    send msg = ...
-
-The ``send`` function is used to post messages to the same channel to which the message that triggered this handler was posted to.
-
-
-Explanation of the type signature:
-
-``IsAdapter a``
-    We require the saved ``a`` in ``BotReacting`` to be an adapter. 
-    This means this function actually interacts with the chat service (sends a message in this case).
-
-``HasMessage m`` 
-    The data in the monad must have a ``Message`` in it somewhere, from which we can find the channel it was posted to.
-
-.. _fn-reply:
-
-The ``reply`` function 
-""""""""""""""""""""""
+The ``getTopic`` function
+"""""""""""""""""""""""""
 
 ::
 
-    reply :: (IsAdapter a, HasMessage m) => String -> BotReacting a m ()
-    reply msg = ...
+    getTopic :: HasTopic m => BotReacting a m String
 
-Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the original message came from, but it also references the author of the original message.
+
+.. _fn-getChannel:
+
+The ``getChannel`` function
+"""""""""""""""""""""""""""
+
+::
+
+    getChannel :: HasChannel m => BotReacting a m Channel
+
+
+.. _fn-getUser:
+
+
+The ``getUser`` function
+"""""""""""""""""""""""""""
+
+::
+
+    getUser :: HasUser m => BotReacting a m User
+
 
 
 Types for Handlers

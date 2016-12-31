@@ -6,6 +6,9 @@ Simple string interpolation
 The marvin string interpolation library is an attempt to make it easy for the user to write text with some generated data in it.
 The design is very similar to the string interpolation in Scala and CoffeeScript, in that the hard work happens at compile time (no parsing overhead at runtime) and any valid Haskell expression can be interpolated.
 
+How to interpolate
+------------------
+
 The library uses the builtin Haskell compiler extension in the form of *QuasiQuoters* (`QuasiQuotes <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#template-haskell-quasi-quotation>`_ language extension).
 
 ::
@@ -32,7 +35,8 @@ This last instance, which is based on ``Show``, can be overlapped by specifying 
 
 To import all interpolators, import ``Marvin.Interpolate.All``.
 
-## Syntax
+Syntax for the interpolated String
+----------------------------------
 
 Interpolation uses the `quasi quoter sytax <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#template-haskell-quasi-quotation>`_, which starts with ``[interpolator_name|`` and ends with ``|]``.
 Anything in between is interpreted by the library.
@@ -59,3 +63,6 @@ There are three escape sequences to allow literal ``%{`` and ``|]``
 +--------+--------+
 
 As a result the sequence ``\%{`` will show up as a literal ``%{`` in the output and ``|\]`` results in a literal ``|]``.
+
+
+The marvin interpolation library, with no dependencies on marvin itself, is separately available on `hackage <https://hackage.haskell.org/package/marvin-interpolate>`_.
