@@ -176,7 +176,7 @@ The ``send`` function
     send :: (IsAdapter a, HasMessage m) => String -> BotReacting a m ()
     send msg = ...
 
-The ``send``function is used to post messages to the same channel to which the message that triggered this handler was posted to.
+The ``send`` function is used to post messages to the same channel to which the message that triggered this handler was posted to.
 
 
 Explanation of the type signature:
@@ -186,7 +186,7 @@ Explanation of the type signature:
     This means this function actually interacts with the chat service (sends a message in this case).
 
 ``HasMessage m`` 
-    The data in the monad must have a ``Message``in it somewhere, from which we can find the channel it was posted to.
+    The data in the monad must have a ``Message`` in it somewhere, from which we can find the channel it was posted to.
 
 .. _fn-reply:
 

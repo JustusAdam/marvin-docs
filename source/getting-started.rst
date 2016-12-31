@@ -10,6 +10,7 @@ The initializer will set up a new project for you, including a sample script, th
 
 If you install marvin through cabal (``cabal install marvin``) or stack (``stack install marvin``) it will install the initializer as well and add it to your path.
 To see the options of the initializer run ``marvin-init --help`` on your command line.
+::
 
     marvin-init ~ make a new marvin project
 

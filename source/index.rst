@@ -57,6 +57,7 @@ Contents:
    external-scripts
    regex
    strings
+   interpolation
    lenses
    faq
 
