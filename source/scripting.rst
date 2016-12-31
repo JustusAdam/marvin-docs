@@ -205,7 +205,7 @@ As with :ref:`enter <fn-enter>` the new enter is available via :ref:`getUser <fn
 .. _fn-exit:
 
 ``exit``
-"""""""""
+""""""""
 
 ::
 
@@ -222,7 +222,7 @@ The channel from which user exited is available via the :ref:`getChannel <fn-get
 .. _fn-exitIn:
 
 ``exitFrom``
-"""""""""""
+""""""""""""
 
 :: 
 
