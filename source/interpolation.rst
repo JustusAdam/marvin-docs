@@ -21,7 +21,7 @@ Some examples to start with:
 
     import Marvin.Interpolate
 
-    str1 = [i|some string %{show $ map succ [1,2,3]} and data|]
+    str1 = [iq|some string %{show $ map succ [1,2,3]} and data|]
     -- "some string [2,3,4] and data"
 
     str2 = 
@@ -29,14 +29,14 @@ Some examples to start with:
             x = "multiple"
             y = "can"
             z = "local scope"
-        in [i|We %{y} interpolate %{x} bindings from %{z}|]
+        in [iq|We %{y} interpolate %{x} bindings from %{z}|]
     -- "We can interpolate multiple bindings from local scope"
 
     str2 =
         let 
             x = ["haskell", "expression"]
             y = " can be"
-        in [i|Any %{intercalate ' ' x ++ y} interpolated|]
+        in [iq|Any %{intercalate ' ' x ++ y} interpolated|]
     -- "Any haskell expression can be interpolated"
 
 
@@ -50,20 +50,20 @@ Alternatively the interpolators are available as splices
     -- "some string [2,3,4] and data"
 
 
-It basically transforms the interpolated string, which is ``[i|interpolated string|]`` or in splices ``$(is "interpolated string")`` into a concatenation of all string bits and the expressions in ``%{}``.
+It basically transforms the interpolated string, which is ``[iq|interpolated string|]`` or in splices ``$(is "interpolated string")`` into a concatenation of all string bits and the expressions in ``%{}``.
 Therefore it is not limited to ``String`` alone, rather it produces a literal at compile time, which can either be interpreted as ``String`` or, using the `OverloadedStrings <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#overloaded-string-literals>`_ extension, as ``Text`` or ``ByteString`` or any other string type.
 
 
 Interpolators and conversion
 ----------------------------
 
-``i`` (for *interpolate*) and ``is`` (for *interpolate splice*) is the basic interpolator, which inserts the expressions verbatim. Hence when using ``i`` or ``is`` all expressions must return the desired string type, otherwise the compiler will raise a type error.
+``iq`` (for *interpolate quoter*) and ``is`` (for *interpolate splice*) is the basic interpolator, which inserts the expressions verbatim. Hence when using ``iq`` or ``is`` all expressions must return the desired string type, otherwise the compiler will raise a type error.
 
 There are specialized interpolators, which also perform automatic conversion of non-string types into the desired string type.
 As an example, from earlier, if we use a specialized interpolator we dont need the call to ``show``.
 ::
 
-    str1 = [i|some string %{show $ map succ [1,2,3]} and data|]
+    str1 = [iq|some string %{show $ map succ [1,2,3]} and data|]
     -- "some string [2,3,4] and data"
     
     -- is the same as
@@ -74,12 +74,12 @@ As an example, from earlier, if we use a specialized interpolator we dont need t
 These specialized interpolators each have an associated typeclass, which converts string types (``String``, ``Text`` and lazy ``Text``) to the target type, but leaves the contents unchanged and calls `show` on all other types before converting.
 This last instance, which is based on the ``Show`` typeclass, can be overlapped by specifying a custom instance for your type, allowing the user to define the conversion.
 
-The naming scheme of the interpolators in general is ``i<splice?><pecialization?>``.
-I. e. ``isS`` expands to *interpolate splice to String* and ``iLT`` to *interpolate to Lazy Text*.
+The naming scheme of the interpolators in general is ``i<splice|quoter><pecialization?>``.
+I. e. ``isS`` expands to *interpolate splice to String* and ``iqLT`` to *interpolate quoter to Lazy Text*.
 
-- ``iS`` and ``isS`` in ``Marvin.Interpolate.String`` converts to ``String`` via the ``ShowStr`` typeclass
-- ``iT`` and ``isT`` in ``Marvin.Interpolate.Text`` converts to ``Text`` via the ``ShowT`` typeclass
-- ``iLT`` and ``isLT`` in ``Marvin.Interpolate.Text.Lazy`` converts to lazy ``Text`` via the ``ShowLT`` typeclass
+- ``iqS`` and ``isS`` in ``Marvin.Interpolate.String`` converts to ``String`` via the ``ShowStr`` typeclass
+- ``iqT`` and ``isT`` in ``Marvin.Interpolate.Text`` converts to ``Text`` via the ``ShowT`` typeclass
+- ``iqLT`` and ``isLT`` in ``Marvin.Interpolate.Text.Lazy`` converts to lazy ``Text`` via the ``ShowLT`` typeclass
 
 To import all interpolators, import ``Marvin.Interpolate.All``.
 
@@ -96,7 +96,7 @@ Anything outside the braces is interpreted as literal string.
 And all names which are in scope can be used, like so.
 ::
 
-    let x = 5 in [iS|x equals %{x}|] -- > "x equals 5"
+    let x = 5 in [iqS|x equals %{x}|] -- > "x equals 5"
 
 .. _escape sequences:
 
@@ -105,7 +105,7 @@ Escape sequences
 
 ::
 
-    str3 = [i|Four escape sequences allow us to write literal ~%{, |~] and %{"~} inside expressions"}|]
+    str3 = [iq|Four escape sequences allow us to write literal ~%{, |~] and %{"~} inside expressions"}|]
     -- "Four escape sequence allow us to write literal %{, |] and } inside expressions"
 
 There are three escape sequences to allow literal ``%{`` and ``|]``
