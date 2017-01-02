@@ -67,19 +67,19 @@ As an example, from earlier, if we use a specialized interpolator we dont need t
     -- "some string [2,3,4] and data"
     
     -- is the same as
-    str2 = [iS|some string %{map succ [1,2,3]} and data|]
+    str2 = [iqS|some string %{map succ [1,2,3]} and data|]
 
-    -- ('iS' is the specialized interpolator for 'String')
+    -- ('iqS' is the specialized interpolator for 'String')
 
 These specialized interpolators each have an associated typeclass, which converts string types (``String``, ``Text`` and lazy ``Text``) to the target type, but leaves the contents unchanged and calls `show` on all other types before converting.
 This last instance, which is based on the ``Show`` typeclass, can be overlapped by specifying a custom instance for your type, allowing the user to define the conversion.
 
 The naming scheme of the interpolators in general is ``i<splice|quoter><pecialization?>``.
-I. e. ``isS`` expands to *interpolate splice to String* and ``iqLT`` to *interpolate quoter to Lazy Text*.
+I. e. ``isS`` expands to *interpolate splice to String* and ``iqL`` to *interpolate quoter to Lazy Text*.
 
 - ``iqS`` and ``isS`` in ``Marvin.Interpolate.String`` converts to ``String`` via the ``ShowStr`` typeclass
 - ``iqT`` and ``isT`` in ``Marvin.Interpolate.Text`` converts to ``Text`` via the ``ShowT`` typeclass
-- ``iqLT`` and ``isLT`` in ``Marvin.Interpolate.Text.Lazy`` converts to lazy ``Text`` via the ``ShowLT`` typeclass
+- ``iqL`` and ``isL`` in ``Marvin.Interpolate.Text.Lazy`` converts to lazy ``Text`` via the ``ShowLT`` typeclass
 
 To import all interpolators, import ``Marvin.Interpolate.All``.
 
