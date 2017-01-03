@@ -145,7 +145,7 @@ As with :ref:`hear <fn-hear>` the match and message are available during handler
 
 ::
 
-    topic :: BotReacting a (String, Channel) () -> ScriptDefinition a ()
+    topic :: BotReacting a (Text, Channel) () -> ScriptDefinition a ()
     topic handler = ...
 
 ``topic`` triggers whenever the topic in a channel which the bot is subscribed to changes.
@@ -162,7 +162,7 @@ The channel in which the topic was changed is available via the :ref:`getChannel
 
 :: 
 
-    topicIn :: String -> BotReacting a String () -> ScriptDefinition a ()
+    topicIn :: Text -> BotReacting a Text () -> ScriptDefinition a ()
     topicIn channelName handler = ...
 
 ``topicIn`` triggers whenever the topic changes in the channel with the human readable ``channelName``.
@@ -177,7 +177,7 @@ As with :ref:`topic <fn-topic>` the new topic is available via :ref:`getTopic <f
 
 ::
 
-    enter :: BotReacting a (String, Channel) () -> ScriptDefinition a ()
+    enter :: BotReacting a (Text, Channel) () -> ScriptDefinition a ()
     enter handler = ...
 
 ``enter`` triggers whenever a user enters in a channel which the bot is subscribed to.
@@ -194,7 +194,7 @@ The channel in which user entered is available via the :ref:`getChannel <fn-getC
 
 :: 
 
-    enterIn :: String -> BotReacting a String () -> ScriptDefinition a ()
+    enterIn :: Text -> BotReacting a Text () -> ScriptDefinition a ()
     enterIn channelName handler = ...
 
 ``enterIn`` triggers whenever the a user enters the channel with the human readable ``channelName``.
@@ -209,7 +209,7 @@ As with :ref:`enter <fn-enter>` the new enter is available via :ref:`getUser <fn
 
 ::
 
-    exit :: BotReacting a (String, Channel) () -> ScriptDefinition a ()
+    exit :: BotReacting a (Text, Channel) () -> ScriptDefinition a ()
     exit handler = ...
 
 ``exit`` triggers whenever a user exits a channel which the bot is subscribed to.
@@ -226,7 +226,7 @@ The channel from which user exited is available via the :ref:`getChannel <fn-get
 
 :: 
 
-    exitFrom :: String -> BotReacting a String () -> ScriptDefinition a ()
+    exitFrom :: Text -> BotReacting a Text () -> ScriptDefinition a ()
     exitFrom channelName handler = ...
 
 ``exitFrom`` triggers whenever a user exits the channel with the human readable ``channelName``.
@@ -245,7 +245,7 @@ The ``send`` function
 
 ::
 
-    send :: (IsAdapter a, HasChannel m) => String -> BotReacting a m ()
+    send :: (IsAdapter a, HasChannel m) => Text -> BotReacting a m ()
     send msg = ...
 
 The ``send`` function is used to post messages to the same channel from which the event that triggered the handler came.
@@ -267,7 +267,7 @@ The ``reply`` function
 
 ::
 
-    reply :: (IsAdapter a, HasMessage m) => String -> BotReacting a m ()
+    reply :: (IsAdapter a, HasMessage m) => Text -> BotReacting a m ()
     reply msg = ...
 
 Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the original message came from, but it also references the author of the original message.
@@ -311,7 +311,7 @@ The ``getTopic`` function
 
 ::
 
-    getTopic :: HasTopic m => BotReacting a m String
+    getTopic :: HasTopic m => BotReacting a m Text
 
 
 .. _fn-getChannel:
@@ -349,7 +349,7 @@ The ``Message`` data type
     data Message = Message
         { sender    :: User
         , channel   :: Channel
-        , content   :: String
+        , content   :: Text
         , timestamp :: TimeStamp
         }
 
