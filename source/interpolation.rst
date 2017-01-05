@@ -8,10 +8,37 @@ marvin-interpolate, A simple string interpolation library
 The marvin string interpolation library is an attempt to make it easy for the user to write text with some generated data in it.
 The design is very similar to the string interpolation in Scala and CoffeeScript, in that the hard work happens at compile time (no parsing overhead at runtime) and any valid Haskell expression can be interpolated.
 
+TLDR and ``Marvin.Prelude`` specifics
+-------------------------------------
+
+By default ``Marvin.Prelude`` exposes two interpolators ``isL`` for composing messages which can be sent to the chat (produces lazy ``Text``) and ``isT`` for composing log messages (produces **strict** ``Text``).
+
+Both require `Template Haskell`_ and `Overloaded Strings`_ which is enabled by adding the lines ``{-# LANGUAGE TemplateHaskell #-}`` and ``{-# LANGUAGE OverloadedStrings #-}`` at the beginning of your script file.
+
+.. _Template Haskell: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#template-haskell
+
+.. _Overloaded Strings: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#overloaded-string-literals
+
+Example:
+::
+
+    {-# LANGUAGE TemplateHaskell #-}
+    {-# LANGUAGE OverloadedStrings #-}
+
+    myStr = let x = "data" in $(isL "some string with %{x}: %{ 1 + 1 }")
+    -- "some string with data: 2"
+    
+The syntax is ``$(interpolator "interpolated string")`` where interpolator is either ``isL`` or ``isT``.
+In the interpolated string you can use ``%{}`` to interpolate a Haskell expression.
+It can use local and global data and any Haskell expression can be used here.
+
+The result of the expression must either be a type of string or be convertible to one via ``Show`` or ``ShowL`` or ``ShowT`` respectivley which is true for most basic data types.
+More information on conversion can be found :ref:`here <interpolation and conversion>`
+
 How to interpolate
 ------------------
 
-The library uses the builtin Haskell compiler extension in the form of *QuasiQuoters* (`QuasiQuotes <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#template-haskell-quasi-quotation>`_ language extension) and /or *splices* (`Template Haskell <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#template-haskell>`_ language extension)
+The library uses the builtin Haskell compiler extension in the form of *QuasiQuoters* (`QuasiQuotes <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#template-haskell-quasi-quotation>`_ language extension) and /or *splices* (`Template Haskell`_ language extension)
 
 Some examples to start with:
 
@@ -42,6 +69,7 @@ Some examples to start with:
 
 Alternatively the interpolators are available as splices
 ::
+
     {-# LANGUAGE TemplateHaskell #-}
 
     import Marvin.Interpolate
@@ -51,8 +79,9 @@ Alternatively the interpolators are available as splices
 
 
 It basically transforms the interpolated string, which is ``[iq|interpolated string|]`` or in splices ``$(is "interpolated string")`` into a concatenation of all string bits and the expressions in ``%{}``.
-Therefore it is not limited to ``String`` alone, rather it produces a literal at compile time, which can either be interpreted as ``String`` or, using the `OverloadedStrings <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#overloaded-string-literals>`_ extension, as ``Text`` or ``ByteString`` or any other string type.
+Therefore it is not limited to ``String`` alone, rather it produces a literal at compile time, which can either be interpreted as ``String`` or, using the `Overloaded Strings`_ extension, as ``Text`` or ``ByteString`` or any other string type.
 
+.. _interpolation and conversion:
 
 Interpolators and conversion
 ----------------------------
@@ -161,4 +190,4 @@ There are a few advantages this libary has over other string formatting options.
     The interpolated expressions are just plain Haskell expressions, no extra syntax, beyond the interpolation braces ``%{}``.
     Also all Haskell expressions, including infix expressions, are fully supported.
 
-    This is different from `Interpolation <http://hackage.haskell.org/package/Interpolation>`_ which introduces additional syntax and does not fully support infix expressions.
+    This is different from `Interpolation <http://hackage.haskell.org/package/Interpolation>`__ which introduces additional syntax and does not fully support infix expressions.

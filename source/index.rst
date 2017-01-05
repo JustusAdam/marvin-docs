@@ -55,6 +55,7 @@ Contents:
    adapters
    configuration
    external-scripts
+   logging
    regex
    strings
    interpolation
