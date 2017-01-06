@@ -29,8 +29,8 @@ Example:
     -- "some string with data: 2"
     
 The syntax is ``$(interpolator "interpolated string")`` where interpolator is either ``isL`` or ``isT``.
-In the interpolated string you can use ``%{}`` to interpolate a Haskell expression.
-It can use local and global data and any Haskell expression can be used here.
+As in CoffeeScript you can use ``#{}`` to interpolate an expression.
+Any valid Haskell expression can be interpolated, it can reference bot local and global bindings.
 
 The result of the expression must either be a type of string or be convertible to one via ``Show`` or ``ShowL`` or ``ShowT`` respectivley which is true for most basic data types.
 More information on conversion can be found :ref:`here <interpolation and conversion>`
@@ -48,7 +48,7 @@ Some examples to start with:
 
     import Marvin.Interpolate
 
-    str1 = [iq|some string %{show $ map succ [1,2,3]} and data|]
+    str1 = [iq|some string #{show $ map succ [1,2,3]} and data|]
     -- "some string [2,3,4] and data"
 
     str2 = 
@@ -56,14 +56,14 @@ Some examples to start with:
             x = "multiple"
             y = "can"
             z = "local scope"
-        in [iq|We %{y} interpolate %{x} bindings from %{z}|]
+        in [iq|We #{y} interpolate #{x} bindings from #{z}|]
     -- "We can interpolate multiple bindings from local scope"
 
     str2 =
         let 
             x = ["haskell", "expression"]
             y = " can be"
-        in [iq|Any %{intercalate ' ' x ++ y} interpolated|]
+        in [iq|Any #{intercalate ' ' x ++ y} interpolated|]
     -- "Any haskell expression can be interpolated"
 
 
@@ -74,11 +74,11 @@ Alternatively the interpolators are available as splices
 
     import Marvin.Interpolate
 
-    str1 = $(is "some string %{show $ map succ [1,2,3]} and data")
+    str1 = $(is "some string #{show $ map succ [1,2,3]} and data")
     -- "some string [2,3,4] and data"
 
 
-It basically transforms the interpolated string, which is ``[iq|interpolated string|]`` or in splices ``$(is "interpolated string")`` into a concatenation of all string bits and the expressions in ``%{}``.
+It basically transforms the interpolated string, which is ``[iq|interpolated string|]`` or in splices ``$(is "interpolated string")`` into a concatenation of all string bits and the expressions in ``#{}``.
 Therefore it is not limited to ``String`` alone, rather it produces a literal at compile time, which can either be interpreted as ``String`` or, using the `Overloaded Strings`_ extension, as ``Text`` or ``ByteString`` or any other string type.
 
 .. _interpolation and conversion:
@@ -92,11 +92,11 @@ There are specialized interpolators, which also perform automatic conversion of 
 As an example, from earlier, if we use a specialized interpolator we dont need the call to ``show``.
 ::
 
-    str1 = [iq|some string %{show $ map succ [1,2,3]} and data|]
+    str1 = [iq|some string #{show $ map succ [1,2,3]} and data|]
     -- "some string [2,3,4] and data"
     
     -- is the same as
-    str2 = [iqS|some string %{map succ [1,2,3]} and data|]
+    str2 = [iqS|some string #{map succ [1,2,3]} and data|]
 
     -- ('iqS' is the specialized interpolator for 'String')
 
@@ -119,13 +119,13 @@ Syntax for the interpolated String
 Interpolation uses the `quasi quoter sytax <https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#template-haskell-quasi-quotation>`_, which starts with ``[interpolator_name|`` and ends with ``|]``.
 Anything in between is interpreted by the library.
 
-The format string in between uses the syntax ``%{expression}``.
+The format string in between uses the syntax ``#{expression}``.
 Any valid Haskell expression can be used inside the braces.
 Anything outside the braces is interpreted as literal string.
 And all names which are in scope can be used, like so.
 ::
 
-    let x = 5 in [iqS|x equals %{x}|] -- > "x equals 5"
+    let x = 5 in [iqS|x equals #{x}|] -- > "x equals 5"
 
 .. _escape sequences:
 
@@ -134,24 +134,20 @@ Escape sequences
 
 ::
 
-    str3 = [iq|Four escape sequences allow us to write literal ~%{, |~] and %{"~} inside expressions"}|]
-    -- "Four escape sequence allow us to write literal %{, |] and } inside expressions"
+    str3 = [iq|Four escape sequences allow us to write literal ##{ and |#] inside expressions"}|]
+    -- "Four escape sequence allow us to write literal #{, |] and } inside expressions"
 
-There are three escape sequences to allow literal ``%{`` and ``|]``
+There are three escape sequences to allow literal ``#{`` and ``|]``
 
 +--------+--------+
 | Input  | Output |
 +--------+--------+
-| ``~]`` | ``]``  |
+| ``#]`` | ``]``  |
 +--------+--------+
-| ``~%`` | ``%``  |
-+--------+--------+
-| ``~}`` | ``}``  |
-+--------+--------+
-| ``~~`` | ``~``  |
+| ``##`` | ``#``  |
 +--------+--------+
 
-As a result the sequence ``~%{`` will show up as a literal ``%{`` in the output and ``|~]`` results in a literal ``|]``.
+As a result the sequence ``##{`` will show up as a literal ``#{`` in the output and ``|#]`` results in a literal ``|]``.
 
 
 Differences between QuasiQuotes and splices
