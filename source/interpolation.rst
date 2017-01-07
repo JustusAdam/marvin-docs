@@ -25,7 +25,7 @@ Example:
     {-# LANGUAGE TemplateHaskell #-}
     {-# LANGUAGE OverloadedStrings #-}
 
-    myStr = let x = "data" in $(isL "some string with %{x}: %{ 1 + 1 }")
+    myStr = let x = "data" in $(isL "some string with #{x}: #{ 1 + 1 }")
     -- "some string with data: 2"
     
 The syntax is ``$(interpolator "interpolated string")`` where interpolator is either ``isL`` or ``isT``.
@@ -183,7 +183,7 @@ There are a few advantages this libary has over other string formatting options.
 
 #. Simple API and full Haskell support
 
-    The interpolated expressions are just plain Haskell expressions, no extra syntax, beyond the interpolation braces ``%{}``.
+    The interpolated expressions are just plain Haskell expressions, no extra syntax, beyond the interpolation braces ``#{}``.
     Also all Haskell expressions, including infix expressions, are fully supported.
 
     This is different from `Interpolation <http://hackage.haskell.org/package/Interpolation>`__ which introduces additional syntax and does not fully support infix expressions.

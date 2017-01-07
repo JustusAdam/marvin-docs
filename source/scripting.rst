@@ -162,12 +162,12 @@ The channel in which the topic was changed is available via the :ref:`getChannel
 
 :: 
 
-    topicIn :: Text -> BotReacting a Text () -> ScriptDefinition a ()
+    topicIn :: Text -> BotReacting a (Text, Channel) () -> ScriptDefinition a ()
     topicIn channelName handler = ...
 
 ``topicIn`` triggers whenever the topic changes in the channel with the human readable ``channelName``.
 
-As with :ref:`topic <fn-topic>` the new topic is available via :ref:`getTopic <fn-getTopic>`.
+As with :ref:`topic <fn-topic>` the new topic is available via :ref:`getTopic <fn-getTopic>` and the channel with :ref:`getChannel <fn-getChannel>`.
 
 
 .. _fn-enter:
@@ -177,7 +177,7 @@ As with :ref:`topic <fn-topic>` the new topic is available via :ref:`getTopic <f
 
 ::
 
-    enter :: BotReacting a (Text, Channel) () -> ScriptDefinition a ()
+    enter :: BotReacting a (User, Channel) () -> ScriptDefinition a ()
     enter handler = ...
 
 ``enter`` triggers whenever a user enters in a channel which the bot is subscribed to.
@@ -194,12 +194,12 @@ The channel in which user entered is available via the :ref:`getChannel <fn-getC
 
 :: 
 
-    enterIn :: Text -> BotReacting a Text () -> ScriptDefinition a ()
+    enterIn :: Text -> BotReacting a (User, Channel) () -> ScriptDefinition a ()
     enterIn channelName handler = ...
 
 ``enterIn`` triggers whenever the a user enters the channel with the human readable ``channelName``.
 
-As with :ref:`enter <fn-enter>` the new enter is available via :ref:`getUser <fn-getUser>`.
+As with :ref:`enter <fn-enter>` the newly entered user is available via :ref:`getUser <fn-getUser>` and the channel with :ref:`getChannel <fn-getChannel>`.
 
 
 .. _fn-exit:
@@ -209,7 +209,7 @@ As with :ref:`enter <fn-enter>` the new enter is available via :ref:`getUser <fn
 
 ::
 
-    exit :: BotReacting a (Text, Channel) () -> ScriptDefinition a ()
+    exit :: BotReacting a (User, Channel) () -> ScriptDefinition a ()
     exit handler = ...
 
 ``exit`` triggers whenever a user exits a channel which the bot is subscribed to.
@@ -226,12 +226,12 @@ The channel from which user exited is available via the :ref:`getChannel <fn-get
 
 :: 
 
-    exitFrom :: Text -> BotReacting a Text () -> ScriptDefinition a ()
+    exitFrom :: Text -> BotReacting a (User, Channel) () -> ScriptDefinition a ()
     exitFrom channelName handler = ...
 
 ``exitFrom`` triggers whenever a user exits the channel with the human readable ``channelName``.
 
-As with :ref:`exit <fn-exit>` the exiting user is available via :ref:`getUser <fn-getUser>`.
+As with :ref:`exit <fn-exit>` the exiting user is available via :ref:`getUser <fn-getUser>` and the channel with :ref:`getChannel <fn-getChannel>`.
 
 
 
@@ -259,6 +259,8 @@ Explanation of the type signature:
 
 ``HasChannel m`` 
     The data in the monad must have an originating ``Channel`` in it somewhere to which the message will be posted.
+    This is true for most handler functions, for instance :ref:`hear <fn-hear>`, :ref:`respond <fn-respond>`, :ref:`enter <fn-enter>` all :ref:`enter <fn-enter>`, :ref:`exit <fn-exit>` and :ref:`topic <fn-topic>` handlers.
+
 
 .. _fn-reply:
 
@@ -313,6 +315,9 @@ The ``getTopic`` function
 
     getTopic :: HasTopic m => BotReacting a m Text
 
+This function is usable in handlers which react to changes of the topic of a channel.
+It returns the *new* topic.
+
 
 .. _fn-getChannel:
 
@@ -322,6 +327,8 @@ The ``getChannel`` function
 ::
 
     getChannel :: HasChannel m => BotReacting a m Channel
+
+Usable in most handler functions, this function returns the channel in which some event occurred.
 
 
 .. _fn-getUser:
@@ -333,6 +340,9 @@ The ``getUser`` function
 ::
 
     getUser :: HasUser m => BotReacting a m User
+
+Usable in all handler functions which involve an acting user (most). 
+Returns the user who triggered an event.
 
 
 
