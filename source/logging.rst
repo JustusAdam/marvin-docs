@@ -42,7 +42,7 @@ For more information on how interpolation is used in general see :ref:`interpola
         hear "sudo .*" $ do
             match <- getMatch
 
-            logInfoN $(isT "I'm asked to do %{match !! 1}")
+            logInfoN $(isT "I'm asked to do #{match !! 1}")
 
             send "okay"
 
@@ -71,7 +71,7 @@ And again it is recommende to use this in conjuction with the interpolator to ea
         hear "sudo .*" $ do
             match <- getMatch
 
-            $logInfo $(isT "I'm asked to do %{match !! 1}")
+            $logInfo $(isT "I'm asked to do #{match !! 1}")
 
             send "okay"
 
