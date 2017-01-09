@@ -111,11 +111,11 @@ There are currently nine reaction functions available:
 
 ::
 
-    hear :: Regex -> BotReacting a MessageReactionData () -> ScriptDefinition a ()
+    hear :: Regex -> BotReacting a (Match, Message a) () -> ScriptDefinition a ()
     hear regex handler = ...
 
 ``hear`` triggers on any message posted which matches the :ref:`regular expression <regex>`.
-The type of Handler is ``BotReacting a MessageReactionData ()``, which means in addition to the :ref`normal reaction capabilities <reaction monad>` it has access to the full message with the :ref:`getMessage <fn-getMessage>` function and to the regex match with :ref:`getMatch <fn-getMatch>`.
+The type of Handler is ``BotReacting a (Match, Message a) ()``, which means in addition to the :ref`normal reaction capabilities <reaction monad>` it has access to the full message with the :ref:`getMessage <fn-getMessage>` function and to the regex match with :ref:`getMatch <fn-getMatch>`.
 
 Since this is a reaction to a message we additionally have can use the :ref:`send <fn-send>` function in this handler to post a message to the same channel the triggering message was posted to and also the :ref:`reply <fn-reply>` function to send a message to the sender of the original message (also posted to the same channel).
 
@@ -127,7 +127,7 @@ Since this is a reaction to a message we additionally have can use the :ref:`sen
 
 ::
 
-    respond :: Regex -> BotReacting a MessageReactionData () -> ScriptDefinition a ()
+    respond :: Regex -> BotReacting a (Match, Message a) () -> ScriptDefinition a ()
     respond regex handler = ...
 
 .. todo:: At some point this needs to support derivations of the name. Maybe make that configurable?
@@ -145,7 +145,7 @@ As with :ref:`hear <fn-hear>` the match and message are available during handler
 
 ::
 
-    topic :: BotReacting a (Topic, Channel) () -> ScriptDefinition a ()
+    topic :: BotReacting a (Topic, Channel' a) () -> ScriptDefinition a ()
     topic handler = ...
 
 ``topic`` triggers whenever the topic in a channel which the bot is subscribed to changes.
@@ -164,7 +164,7 @@ The channel in which the topic was changed is available via the :ref:`getChannel
 
 :: 
 
-    topicIn :: Text -> BotReacting a (Topic, Channel) () -> ScriptDefinition a ()
+    topicIn :: Text -> BotReacting a (Topic, Channel' a) () -> ScriptDefinition a ()
     topicIn channelName handler = ...
 
 Like :ref:`topic <fn-topic>` but only triggers when the topic changes in the channel with the human readable ``channelName``.
@@ -177,7 +177,7 @@ Like :ref:`topic <fn-topic>` but only triggers when the topic changes in the cha
 
 ::
 
-    enter :: BotReacting a (User, Channel) () -> ScriptDefinition a ()
+    enter :: BotReacting a (User' a, Channel' a) () -> ScriptDefinition a ()
     enter handler = ...
 
 ``enter`` triggers whenever a user enters in a channel which the bot is subscribed to.
@@ -194,7 +194,7 @@ The channel in which user entered is available via the :ref:`getChannel <fn-getC
 
 :: 
 
-    enterIn :: Text -> BotReacting a (User, Channel) () -> ScriptDefinition a ()
+    enterIn :: Text -> BotReacting a (User' a, Channel' a) () -> ScriptDefinition a ()
     enterIn channelName handler = ...
 
 Like :ref:`enter <fn-enter>` but only triggers when a user enters the channel with the human readable ``channelName``.
@@ -207,7 +207,7 @@ Like :ref:`enter <fn-enter>` but only triggers when a user enters the channel wi
 
 ::
 
-    exit :: BotReacting a (User, Channel) () -> ScriptDefinition a ()
+    exit :: BotReacting a (User' a, Channel' a) () -> ScriptDefinition a ()
     exit handler = ...
 
 ``exit`` triggers whenever a user exits a channel which the bot is subscribed to.
@@ -224,7 +224,7 @@ The channel from which user exited is available via the :ref:`getChannel <fn-get
 
 :: 
 
-    exitFrom :: Text -> BotReacting a (User, Channel) () -> ScriptDefinition a ()
+    exitFrom :: Text -> BotReacting a (User' a, Channel' a) () -> ScriptDefinition a ()
     exitFrom channelName handler = ...
 
 Like :ref:`exit <fn-exit>` but only triggers when a user exits the channel with the human readable ``channelName``.
@@ -240,7 +240,7 @@ The ``send`` function
 
 ::
 
-    send :: (IsAdapter a, HasChannel m) => Text -> BotReacting a m ()
+    send :: (IsAdapter a, Get m (Channel' a)) => Text -> BotReacting a m ()
     send msg = ...
 
 The ``send`` function is used to post messages to the same channel from which the event that triggered the handler came.
@@ -252,7 +252,7 @@ Explanation of the type signature:
     We require the saved ``a`` in ``BotReacting`` to be an adapter. 
     This means this function actually interacts with the chat service (sends a message in this case).
 
-``HasChannel m`` 
+``Get m (Channel' a)`` 
     The data in the monad must have an originating ``Channel`` in it somewhere to which the message will be posted.
     This is true for most handler functions, for instance :ref:`hear <fn-hear>`, :ref:`respond <fn-respond>`, :ref:`enter <fn-enter>` all :ref:`enter <fn-enter>`, :ref:`exit <fn-exit>` and :ref:`topic <fn-topic>` handlers.
 
@@ -264,13 +264,10 @@ The ``reply`` function
 
 ::
 
-    reply :: (IsAdapter a, HasMessage m) => Text -> BotReacting a m ()
+    reply :: (IsAdapter a, Get m (User' a), Get m (Channel' a)) => Text -> BotReacting a m ()
     reply msg = ...
 
 Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the original message came from, but it also references the author of the original message.
-
-We require ``HasMessage`` here, because we need some sender to reply to.
-Since the :ref:`Message <type-Message>` already contains a ``Channel``, we don't need ``HasChannel``.
 
 
 .. _fn-getMatch:
@@ -295,7 +292,7 @@ The ``getMessage`` function
 
 ::
 
-    getMessage :: HasMessage m => BotReacting a m Message
+    getMessage :: Get m (Message a) => BotReacting a m (Message a)
 
 Retrieves the :ref:`respond <fn-respond>` structure for the message this handler is reacting to inside a handler monad whos state supports it.
 Examples are the handlers for :ref:`hear <fn-hear>` and :ref:`respond <fn-respond>`.
@@ -323,7 +320,7 @@ The ``getChannel`` function
 
 ::
 
-    getChannel :: HasChannel m => BotReacting a m Channel
+    getChannel :: Get m (Channel' a) => BotReacting a m (Channel a)
 
 Usable in most handler functions, this function returns the channel in which some event occurred.
 
@@ -336,7 +333,7 @@ The ``getUser`` function
 
 ::
 
-    getUser :: HasUser m => BotReacting a m User
+    getUser :: Get m (User' a) => BotReacting a m User
 
 Usable in all handler functions which involve an acting user (most). 
 Returns the user who triggered an event.
@@ -353,9 +350,9 @@ The ``Message`` data type
 
 :: 
 
-    data Message = Message
-        { sender    :: User
-        , channel   :: Channel
+    data Message a = Message
+        { sender    :: User a
+        , channel   :: Channel a
         , content   :: Text
         , timestamp :: TimeStamp
         }
