@@ -24,18 +24,6 @@ Configuration pertaining to the system itself is stored under the "bot" key.
         adapter = "slack-rtm"
     }
 
-+-------------+---------------------------------------+------------------------------------------------------+
-| Key         | default                               | Usage                                                |
-+=============+=======================================+======================================================+
-| ``name``    | ``"marvin"``                          | Bot name                                             |
-|             |                                       | (for logging and which string `respond` triggers on) |
-+-------------+---------------------------------------+------------------------------------------------------+
-| ``logging`` | ``ERROR``                             | Verbosity of the logging                             |
-+-------------+---------------------------------------+------------------------------------------------------+
-| ``adapter`` | optional, defaults to ``"slack-rtm"`` | Adapter to use in the main file.                     |
-|             |                                       | (Only used by preprocesor, see :ref:`marvin-pp`)     |
-+-------------+---------------------------------------+------------------------------------------------------+
-
 Script config
 -------------
 
@@ -81,3 +69,41 @@ The exact nature of the adapter config depends on the adapter itself.
         }
     }
  
+
+Example
+-------
+
+An example config with all currently available config options (excludes script config as those are user defined).
+::
+
+    bot {
+        # String, one of WARNING, ERROR, INFO, DEBUG, optional, defaults to WARNING
+        # Logging level for the bot
+        logging = "WARNING" 
+
+        # String, optional, default to "marvin", name for the bot
+        # Also sometimes used to identify whether a given message should be interpreted as a command
+        name = "marvin" 
+        
+        # String, one of the available adapter identifiers, optional, defaults to "slack-rtm"
+        # Adapter to use in the main file.
+        # Only used by the preprocessor.
+        adapter = "slack-rtm"
+    }
+
+    adapter {
+        slack-rtm {
+            token = "" # String, required. Authentication token for slack api
+        }
+        telegram-poll {
+            token = "" # String, required. Authentication token for telegram api
+        }
+        telegram-push {
+            token = "" # String, required. Authentication token for telegram api
+        }
+        shell {
+            # String, filepath, optional. 
+            # If present records the history in this file
+            history-file = ""
+        }
+    }
