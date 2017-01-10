@@ -25,21 +25,20 @@ Installing marvin
 
 You can get a release version of marvin on `Hackage <https://hackage.haskell.org/package/marvin>`_
 
-However this library is still a very early stage so you might want to get updates quicker. 
-You can do so by using `stack <https://docs.haskellstack.org>`_ and adding a recent commit of this repository to your ``stack.yaml`` file.
-Stack will take care of downloading and building it for you.
+However the recommended way to install this package is via ``stack``.
+You can let stack do the resolving for you if you've added marvin in your ``.cabal`` file you can simply run ``stack solver --update-config`` and it will add the necessary dependencies to your ``stack.yaml`` file.
 
+Or you can add it yourself.
 Your ``stack.yaml`` should include a section like this:
 
 .. code-block:: yaml
 
     # stack.yaml
-    packages:
-    - '.'
-    - location:
-        git: https://github.com/JustusAdam/marvin
-        commit: 46cd98d179be6f8fc4e385a76f9ea38340a687ad
+    extra-deps:
+        - marvin-0.0.7
+        - marvin-interpolate-0.4.0
 
+After that ``stack build`` will pull and install marvin for you.
 
 Scripts and the main file
 -------------------------
