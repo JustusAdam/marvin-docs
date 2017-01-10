@@ -75,6 +75,31 @@ Reacting
 The reaction Monad
 ^^^^^^^^^^^^^^^^^^
 
+::
+
+    data BotReacting a d r = ... deriving (Monad, MonadIO, MonadReader (BotActionState a d)
+                                          , MonadLogger, MonadLoggerIO)
+
+
+The reaction monad offers basically four different capabilities.
+
+#. ``MonadIO`` allows the user to execute arbitrary ``IO`` actions by lifting them with ``liftIO``.
+    This can be things such as performing HTTP requests, reading files etc.
+
+#. ``MonadReader (BotActionState a d)`` allows read access to the data carried by the monad.
+    In general you dont need to use this directly as functions such as :ref:`getUser <fn-getUser>` are much more convenient to use.
+    However the readable data you get by using ``ask`` contains not only the payload which is of type ``d`` and different depending on each handler function,
+    but also access to the adapter, the config and script id. And is therefore capable of
+
+#. Accessing the adapter. 
+    This enables the handler to communicate. 
+    Functions such as :ref:`send <fn-send>` and :ref:`messageChannel <fn-messageChannel>` can be used to send messages to the chat application.
+
+#. ``MonadLogger(IO)`` Allows you to write log messages using functions from the `monad-logger`_ package by importing ``Control.Monad.Logging``.
+
+.. _monad-logger: https://hackage.haskell.org/package/monad-logger
+
+
 Reaction functions
 ^^^^^^^^^^^^^^^^^^
 
