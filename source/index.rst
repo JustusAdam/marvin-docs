@@ -24,15 +24,13 @@ A quick snippet of code
         hear "sudo (.+)" $ do
             match <- getMatch
 
-            let thing = match !! 1
-
-            reply $ "All right, i'll do " ++ thing
+            reply $(isL "All right, i'll do #{match !! 1}")
         
         respond "open the (\\w+) door" $ do
             match <- getMatch
             let door = match !! 1
             openDoor door
-            send $ printf "Door %s opened" door
+            send $(isL "Door #{door} opened")
         
         respond "what is in file (\\w+)\\??" $ do
             match <- getMatch 
