@@ -13,6 +13,24 @@ Adapter polymorphism
 --------------------
 
 The capabilties required of an adapter is defined via the typeclass ``IsAdapter`` in ``Marvin.Adapter``.
+Therefore you may define generic scripts which will work with any adapter using just the ``IsAdapter`` constraint in the script initializer type signature.
+
+::
+
+    import Marvin
+
+    script :: IsAdapter a => ScriptInit a
+    script = defineScript "name" $ do ...
+
+Or if you need capabilities specific to some adapter you can reference the adapter type directly.
+
+::
+
+    import Marvin
+    import Marvin.Adapter.Slack.RTM
+
+    script :: ScriptInit (Slack RTM)
+    script = defineScript "name" $ do ...
 
 Users can define their own adapters of course but are strongly encouraged to release generic adapters publicly or `contribute them to marvin <https://github.com/JustusAdam/marvin/pulls>`_.
 
