@@ -26,7 +26,7 @@ It contains all the marvin related functions you will need.
 
 .. hint:: 
     You dont *have* to use ``Marvin.Prelude``. 
-    The prelude is just a convenient `collection of other modules <http://hackage.haskell.org/package/marvin-0.0.4/docs/Marvin-Prelude.html>`_, you can also import just the ones you need directly, but this is only recommended for people experienced with Haskell.
+    The prelude is just a convenient `collection of other modules <http://hackage.haskell.org/package/marvin-0.1.1/docs/Marvin-Prelude.html>`_, you can also import just the ones you need directly, but this is only recommended for people experienced with Haskell.
 
 ::
 

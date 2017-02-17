@@ -35,8 +35,8 @@ Your ``stack.yaml`` should include a section like this:
 
     # stack.yaml
     extra-deps:
-        - marvin-0.0.7
-        - marvin-interpolate-0.4.0
+        - marvin-0.1.1
+        - marvin-interpolate-1.0
 
 After that ``stack build`` will pull and install marvin for you.
 
@@ -84,7 +84,7 @@ The main file
 
 This file (ususally called ``Main.hs``) ties the scripts together and defines the :ref:`adapters` which your marvin project uses.
 
-*If you use the initializer ``marvin-init`` the main file will already be defined for you and registered in the ``.cabal`` file.*
+.. note:: If you use the initializer ``marvin-init`` the main file will already be defined for you and registered in the ``.cabal`` file.
 
 The file must be a Haskell source file i.e. end with ``.hs`` and be mentioned in the ``main-is`` section of your ``.cabal`` file.
 It will look someting like this:
