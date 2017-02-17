@@ -299,6 +299,31 @@ The ``reply`` function
 Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the original message came from, but it also references the author of the original message.
 
 
+.. _fn-messageChannel:
+
+The ``messageChannel`` function 
+"""""""""""""""""""""""""""""""
+
+::
+
+    messageChannel :: (HasConfigAccess m, AccessAdapter m, IsAdapter (AdapterT m)) => L.Text -> L.Text -> m ()
+    messageChannel channelName message = ...
+
+Similar to :ref:`send <fn-send>` and :ref:`reply <fn-reply>` this functions sends a message to the channel with the (human readable) ``channelName``. If instead of a name you have a ``Channel a`` object, you can use :ref:`messageChannel' <fn-messageChannel'>`.
+
+.. _fn-messageChannel':
+
+The ``messageChannel'`` function 
+""""""""""""""""""""""""""""""""
+
+::
+
+    messageChannel' :: (HasConfigAccess m, AccessAdapter m, IsAdapter (AdapterT m), MonadIO m) => Channel (AdapterT m) -> L.Text -> m ()
+    messageChannel' channel message = ...
+
+Like :ref:`messgeChannel <fn-messageChannel>` but references the channel by channel object, rather than name.
+
+
 .. _fn-getMatch:
 
 The ``getMatch`` function

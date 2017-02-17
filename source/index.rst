@@ -11,6 +11,12 @@ Marvin aims to recreate the ease of use and straightforward API of Hubot, and co
 
 If you are new to marvin you may want to begin with the :ref:`getting started` section or the :ref:`how to script with marvin <scripting>` section to get a sense of how scripting works with marvin.
 
+Links
+-----
+
+* `Marvin on Hackage <https://hackage.haskell.org/package/marvin>`__
+* `Marvin in GitHub <https://github.com/JustusAdam/marvin>`__
+
 A quick snippet of code
 -----------------------
 ::
