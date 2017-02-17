@@ -92,18 +92,39 @@ An example config with all currently available config options (excludes script c
     }
 
     adapter {
-        slack-rtm {
-            token = "" # String, required. Authentication token for slack api
-        }
-        telegram-poll {
-            token = "" # String, required. Authentication token for telegram api
-        }
-        telegram-push {
-            token = "" # String, required. Authentication token for telegram api
-        }
         shell {
             # String, filepath, optional. 
             # If present records the history in this file
             history-file = ""
+        }
+        slack-rtm {
+            token = "" # String, required. Authentication token for slack api
+        }
+        slack-events {
+            token = "" # String, required. This token is used to confirm recieved messages come from slack
+
+            # boolean, defaults to true. Whether to use TLS for encryption.
+            # Note that slack requires a webhook receiver to be tls protected. 
+            # Therefore this must be activated unless the server is behind a proxy using tls.
+            use-tls = true 
+            certfile = "" # String (filepath), required if tls is used. As the server needs to use ssl, a certificate is required.
+            keyfile = "" # String (filepath), required if tls is used. As the server needs to use ssl, a certificate is required.
+
+            port = 7000 # Integer, optional. Defaults to 7000. Port on which the server listens for requests.
+        }
+        telegram-poll {
+            token = "" # String, required. Authentication token for telegram api
+            polling-timeout = 120 # positive integer, optional. Timeout for long polling requests
+        }
+        telegram-push {
+            token = "" # String, required. Authentication token for telegram api
+
+            url = "https://..." # String, required. Url of this server. (target for the webhook)
+
+            use-tls = false # boolean, defaults to true. Whether to use TLS for encryption.
+            certfile = "" # String (filepath), required if tls is used. As the server needs to use ssl, a certificate is required.
+            keyfile = "" # String (filepath), required if tls is used. As the server needs to use ssl, a certificate is required.
+
+            port = 7000 # Integer, optional. Defaults to 7000. Port on which the server listens for requests.
         }
     }
