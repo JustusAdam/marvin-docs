@@ -14,8 +14,12 @@ If you are new to marvin you may want to begin with the :ref:`getting started` s
 Links
 -----
 
-* `Marvin on Hackage <https://hackage.haskell.org/package/marvin>`__
-* `Marvin in GitHub <https://github.com/JustusAdam/marvin>`__
+* `Hackage <https://hackage.haskell.org/package/marvin>`__
+* `GitHub Repository <https://github.com/JustusAdam/marvin>`__
+* `Bugtracker <https://github.com/JustusAdam/marvin/issues>`__
+* `Documentation repository <https://github.com/JustusAdam/marvin-docs>`__ and `bugtracker <https://github.com/JustusAdam/marvin-docs/issues>`__
+
+
 
 A quick snippet of code
 -----------------------
