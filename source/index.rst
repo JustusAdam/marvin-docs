@@ -18,8 +18,9 @@ Links
 * `GitHub Repository <https://github.com/JustusAdam/marvin>`__
 * `Bugtracker <https://github.com/JustusAdam/marvin/issues>`__
 * `Documentation repository <https://github.com/JustusAdam/marvin-docs>`__ and `bugtracker <https://github.com/JustusAdam/marvin-docs/issues>`__
+* `Slack channel <slack-channel>`_ (:ref:`signup instructions <testing-and-talking>`)
 
-
+.. _slack-channel: https://marvin-bot.slack.com
 
 A quick snippet of code
 -----------------------
@@ -54,6 +55,16 @@ A quick snippet of code
             username <- getUsername user
 
             send $(isL "Hello #{username} welcome to the random channel!")
+
+
+.. _testing-and-taking:
+
+Testing and Talking
+-------------------
+
+There's a `slack channel <slack-channel>`_ where you can ask questions or play around with a `test instance of marvin <https://github.com/JustusAdam/marvin/blob/master/test/integration/slack/Script1.hs>`__.
+
+It's currently invite-only, so `send me an email <mailto:dev@justus.science>`_ if you would like to join.
 
 
 Contents:
