@@ -27,6 +27,6 @@ This means each external script must be in its own module and be named ``script`
     ]
 
 
-.. note:: The API around `external-scripts.json` is not stable and it will probably change in the future, although we might preserve backward compatibility.
+.. note:: The API around ``external-scripts.json`` is not stable and it will probably change in the future, although we might preserve backward compatibility.
 
     You can join the discussion around its design on `GitHub <https://github.com/JustusAdam/marvin/issues/8>`__.
