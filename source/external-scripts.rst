@@ -15,3 +15,13 @@ If you manually create the main file, you add the script like a user script by i
 If you use the automatic main file you can add external scripts by listing the modules to import in the ``external-scripts.json`` file.
 Currently the ``external-scripts.json`` only supports listing modules.
 This means each external script must be in its own module and be named ``script``.
+
+
+.. code-block:: json
+
+    [ 
+        "Marvin.Script.SomeScript",
+        "Marvin.Script.AnotherScript",
+        "SomeUserScript",
+        "Some.Library.Script"
+    ]

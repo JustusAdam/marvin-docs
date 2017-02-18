@@ -8,6 +8,8 @@ Marvin projects basically comprise of a collection of individual scripts and a m
 To start a new project marvin provides an initializer, called ``marvin-init``.
 The initializer will set up a new project for you, including a sample script, the main file and the Haskell project configuration to make compiling smooth and easy.
 
+.. note:: Always run ``marvin-init`` in an empty directory, as it will place certain files there and overwrite existing files with the same name.
+
 If you install marvin through cabal (``cabal install marvin``) or stack (``stack install marvin``) it will install the initializer as well and add it to your path.
 To see the options of the initializer run ``marvin-init --help`` on your command line.
 ::
@@ -19,6 +21,8 @@ To see the options of the initializer run ``marvin-init --help`` on your command
     Available options:
     -h,--help                Show this help text
     -a,--adapter ID          id of the adapter to use
+
+Information on Adapters and their id's can be found in the :ref:`adapters` section.
 
 Installing marvin
 -----------------
@@ -40,8 +44,8 @@ Your ``stack.yaml`` should include a section like this:
 
 After that ``stack build`` will pull and install marvin for you.
 
-Scripts and the main file
--------------------------
+Scripts
+-------
 
 The functionality for your marvin installation is split into individual parts, called scripts.
 Each script is some Haskell structure created with ``defineScript``.
@@ -102,8 +106,8 @@ It will look someting like this:
     -- list of all scripts to use
     scripts :: [ScriptInit SlackRTMAdapter]
     scripts = [ HelloWorld.script 
-            , MyScript.script 
-            ]
+              , MyScript.script 
+              ]
 
     main :: IO ()
     main = runMarvin scripts
