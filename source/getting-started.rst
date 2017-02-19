@@ -30,17 +30,8 @@ Installing marvin
 You can get a release version of marvin on `Hackage <https://hackage.haskell.org/package/marvin>`_
 
 However the recommended way to install this package is via ``stack``.
-You can let stack do the resolving for you if you've added marvin in your ``.cabal`` file you can simply run ``stack solver --update-config`` and it will add the necessary dependencies to your ``stack.yaml`` file.
-
-Or you can add it yourself.
-Your ``stack.yaml`` should include a section like this:
-
-.. code-block:: yaml
-
-    # stack.yaml
-    extra-deps:
-        - marvin-0.1.1
-        - marvin-interpolate-1.0
+The marvin package is in the stack database as of ``nightly-2017-02-19``.
+You can let stack do the resolving for you if you've added marvin in your ``.cabal`` file you can simply run ``stack solver --update-config`` and it will choose the right versions for you.
 
 After that ``stack build`` will pull and install marvin for you.
 
@@ -57,7 +48,7 @@ External scripts
 You can include external scripts in the form of a library.
 To do this you must add the library name to the ``.cabal`` and ``stack.yaml`` file of your project. 
 
-.. todo:: add example
+You can find more information on external scripts and an example ``external-scripts.json`` file in the :ref:`external scripts section <external-scripts>`
 
 User defined scripts
 ^^^^^^^^^^^^^^^^^^^^
