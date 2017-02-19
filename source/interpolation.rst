@@ -30,7 +30,7 @@ Example:
     
 The syntax is ``$(interpolator "interpolated string")`` where interpolator is either ``isL`` or ``isT``.
 As in CoffeeScript you can use ``#{}`` to interpolate an expression.
-Any valid Haskell expression can be interpolated, it can reference bot local and global bindings.
+Any valid Haskell expression can be interpolated, it can reference both local and global bindings.
 
 The result of the expression must either be a type of string or be convertible to one via ``Show`` or ``ShowL`` or ``ShowT`` respectivley which is true for most basic data types.
 More information on conversion can be found :ref:`here <interpolation and conversion>`
@@ -134,10 +134,10 @@ Escape sequences
 
 ::
 
-    str3 = [iq|Four escape sequences allow us to write literal ##{ and |#] inside expressions"}|]
-    -- "Four escape sequence allow us to write literal #{, |] and } inside expressions"
+    str3 = [iq|Two escape sequences allow us to write literal ##{ and |#] inside expressions"}|]
+    -- "Two escape sequence allow us to write literal #{, |] and } inside expressions"
 
-There are three escape sequences to allow literal ``#{`` and ``|]``
+There are two escape sequences to allow literal ``#{`` and ``|]``
 
 +--------+--------+
 | Input  | Output |
