@@ -35,6 +35,9 @@ Or if you need capabilities specific to some adapter you can reference the adapt
 Users can define their own adapters of course but are strongly encouraged to release generic adapters publicly or `contribute them to marvin <https://github.com/JustusAdam/marvin/pulls>`_.
 
 
+.. _issues: https://github.com/JustusAdam/marvin/issues
+
+
 Currently defined Adapters
 --------------------------
 
@@ -61,6 +64,14 @@ It is recommended to run a shell instance of marvin with stderr piped to a file 
 
 The shell adapter supports a persistent history by specifying ``adapters.shell.history-file`` in your config.
 
+.. admonition:: Configuration keys
+
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | Name         | Type   | Necessity | Description                                                   |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | history-file | String | optional  | If set the history of entered commands will be persisted here |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+
 Slack 
 ^^^^^
 
@@ -86,6 +97,14 @@ It works by opening a websocket to the slack servers from which it recieves even
 The adapter id is "slack-rtm".
 For manual wiring you'll need the ``(SlackAdapter RTM)`` data structure from ``Marvin.Adapter.Slack.RTM``.
 
+.. admonition:: Configuration keys
+
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | Name         | Type   | Necessity | Description                                                   |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | token        | String | required  | Authentication token for the slack API                        |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+
 Events API
 """"""""""
 
@@ -106,8 +125,23 @@ In addition to configuring marvin for this adapter you'll also have tell slack t
 The adapter id is "slack-rtm".
 For manual wiring you'll need the ``(SlackAdapter RTM)`` data structure from ``Marvin.Adapter.Slack.RTM``.
 
+.. admonition:: Configuration keys
 
-.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <https://github.com/JustusAdam/marvin/issues>`__.
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | Name         | Type   | Necessity                 | Description                                                   |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | token        | String | required                  | Authentication token for the slack API                        |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | use-tls      | Bool   | optional                  | Whether to use TLS encryption, defaults to true               |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | certfile     | String | required if TLS is used   | Path to the TLS certificate                                   |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | keyfile      | String | required if TLS is used   | Path to the TLS key                                           |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | port         | Int    | optional                  | Port on which to run the server                               |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+
+.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
 
 
 Telegram
@@ -132,7 +166,17 @@ The telegram poll adapter sends long running http requests to the telegram serve
 
 A unique trait of this adapter is the ``polling-timeout`` configuration key, which governs how long at maximum the polling requests may be kept open if no new event has arrived.
 
-.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <https://github.com/JustusAdam/marvin/issues>`__.
+.. admonition:: Configuration keys
+
+    +-----------------+--------+-----------+---------------------------------------------------------------+
+    | Name            | Type   | Necessity | Description                                                   |
+    +-----------------+--------+-----------+---------------------------------------------------------------+
+    | token           | String | required  | Authentication token for the Telegram API                     |
+    +-----------------+--------+-----------+---------------------------------------------------------------+
+    | polling-timeout | Int    | optional  | Timeout for the polling requests (seconds) defaults to 120    |
+    +-----------------+--------+-----------+---------------------------------------------------------------+
+
+.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
 
 Push
 """"
@@ -149,4 +193,23 @@ Push
 
 The telegram push adapter creates a server and registers a webhook with telegram to receive event updates.
 
-.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <https://github.com/JustusAdam/marvin/issues>`__.
+.. admonition:: Configuration keys
+
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | Name         | Type   | Necessity                 | Description                                                   |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | token        | String | required                  | Authentication token for the slack API                        |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | url          | String | required                  | URL on which this server runs                                 |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | use-tls      | Bool   | optional                  | Whether to use TLS encryption, defaults to true               |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | certfile     | String | required if TLS is used   | Path to the TLS certificate                                   |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | keyfile      | String | required if TLS is used   | Path to the TLS key                                           |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+    | port         | Int    | optional                  | Port on which to run the server                               |
+    +--------------+--------+---------------------------+---------------------------------------------------------------+
+
+.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
+
