@@ -10,7 +10,7 @@ The initializer will set up a new project for you, including a sample script, th
 
 .. note:: Always run ``marvin-init`` in an empty directory, as it will place certain files there and overwrite existing files with the same name.
 
-If you install marvin through cabal (``cabal install marvin``) or stack (``stack install marvin``) it will install the initializer as well and add it to your path.
+If you install marvin through `cabal <https://www.haskell.org/cabal/>`__ (``cabal install marvin``) or `stack <https://docs.haskellstack.org>`_ (``stack install marvin``) it will install the initializer as well and add it to your path.
 To see the options of the initializer run ``marvin-init --help`` on your command line.
 ::
 
@@ -29,7 +29,7 @@ Installing marvin
 
 You can get a release version of marvin on `Hackage <https://hackage.haskell.org/package/marvin>`_
 
-However the recommended way to install this package is via ``stack``.
+However the recommended way to install this package is via `stack`_.
 The marvin package is in the stack database as of ``nightly-2017-02-19``.
 You can let stack do the resolving for you if you've added marvin in your ``.cabal`` file you can simply run ``stack solver --update-config`` and it will choose the right versions for you.
 
