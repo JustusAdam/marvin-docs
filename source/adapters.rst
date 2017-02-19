@@ -213,3 +213,31 @@ The telegram push adapter creates a server and registers a webhook with telegram
 
 .. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
 
+
+IRC
+^^^
+
+.. admonition:: Quick info
+
+    +------------+------------------------+
+    | Adapter id | ``irc`       `         |
+    +------------+------------------------+
+    | Module     | ``Marvin.Adapter.IRC`` |
+    +------------+------------------------+
+    | Type       | ``IRCAdapter``         |
+    +------------+------------------------+
+
+
+The irc adapter connects to your IRC server via the `irc-conduit library <https://hackage.haskell.org/package/irc-conduit>`__.
+
+.. admonition:: Configuration keys
+
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | Name         | Type   | Necessity | Description                                                   |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | host         | String | required  | Url for the IRC server                                        |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | port         | Int    | reqired   | Port for the irc server                                       |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+
+.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
