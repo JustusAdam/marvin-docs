@@ -38,11 +38,8 @@ Users can define their own adapters of course but are strongly encouraged to rel
 .. _issues: https://github.com/JustusAdam/marvin/issues
 
 
-Currently defined Adapters
---------------------------
-
 Shell
-^^^^^
+-----
 
 .. admonition:: Quick info
 
@@ -73,12 +70,12 @@ The shell adapter supports a persistent history by specifying ``adapters.shell.h
     +--------------+--------+-----------+---------------------------------------------------------------+
 
 Slack 
-^^^^^
+-----
 
 For both of the following adapters you'll have to create a new `bot user <https://api.slack.com/bot-users>`__ for your slack team.
 
 Real Time Messaging API
-"""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. admonition:: Quick info
 
@@ -106,7 +103,7 @@ For manual wiring you'll need the ``(SlackAdapter RTM)`` data structure from ``M
     +--------------+--------+-----------+---------------------------------------------------------------+
 
 Events API
-""""""""""
+^^^^^^^^^^
 
 .. admonition:: Quick info
 
@@ -145,12 +142,12 @@ For manual wiring you'll need the ``(SlackAdapter RTM)`` data structure from ``M
 
 
 Telegram
-^^^^^^^^
+--------
 
 Both of the following adapters require you to create and register a `telegram bot <https://core.telegram.org/bots#6-botfather>`__
 
 Poll
-""""
+^^^^
 
 .. admonition:: Quick info
 
@@ -179,7 +176,7 @@ A unique trait of this adapter is the ``polling-timeout`` configuration key, whi
 .. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
 
 Push
-""""
+^^^^
 
 .. admonition:: Quick info
 
@@ -213,3 +210,51 @@ The telegram push adapter creates a server and registers a webhook with telegram
 
 .. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
 
+
+IRC
+---
+
+.. admonition:: Quick info
+
+    +------------+------------------------+
+    | Adapter id | ``irc``                |
+    +------------+------------------------+
+    | Module     | ``Marvin.Adapter.IRC`` |
+    +------------+------------------------+
+    | Type       | ``IRCAdapter``         |
+    +------------+------------------------+
+
+
+The irc adapter connects to your IRC server via the `irc-conduit <https://hackage.haskell.org/package/irc-conduit>`__ library.
+
+.. admonition:: Configuration keys
+
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | Name         | Type   | Necessity | Description                                                   |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | host         | String | required  | Url for the IRC server                                        |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+    | port         | Int    | reqired   | Port for the irc server                                       |
+    +--------------+--------+-----------+---------------------------------------------------------------+
+
+
+Command and message events
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* All direct messages (``privmsg``) to the bot are interpreted as a command, and the contents of the message is passed to the handlers such as `respond <fn-respond>`_.
+* Messages in a channel, which are directed at the bot are also interpreted as commands.
+* All other messages are interpreted as message events.
+
+.. important:: **Caveats**
+
+    Message encoding
+        As I am not very familiar with the IRC API and its message encodings in the current adapter I assume that all messages are utf-8 encoded.
+        Should this not be the case, please `report it <issues>`_.
+        Should you be someone who is familiar with the encodings of IRC messages, please `contact me <mailto:dev@justus.science>`__ so that we can improve this adapter.
+
+    CTCP messages
+        CTCP messages are not supported.
+        All CTCP messages are currently ignored.
+        However I welcome anyone who would like to try and implement some CTCP functionality.
+
+.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
