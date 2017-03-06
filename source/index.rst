@@ -75,10 +75,8 @@ Contents:
    configuration
    external-scripts
    logging
-   regex
    strings
    interpolation
-   lenses
    faq
 
 

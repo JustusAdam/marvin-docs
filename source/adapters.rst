@@ -256,5 +256,3 @@ Command and message events
         CTCP messages are not supported.
         All CTCP messages are currently ignored.
         However I welcome anyone who would like to try and implement some CTCP functionality.
-
-.. important:: This adapter is not very well tested yet, please report any issues you encounter `here <issues>`_.
