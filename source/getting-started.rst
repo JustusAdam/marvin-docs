@@ -30,10 +30,36 @@ Installing marvin
 You can get a release version of marvin on `Hackage <https://hackage.haskell.org/package/marvin>`_
 
 However the recommended way to install this package is via `stack`_.
-The marvin package is in the stack database as of ``nightly-2017-02-19``.
+The marvin package is part if the stack lts as of ``lts-8.5``.
 You can let stack do the resolving for you if you've added marvin in your ``.cabal`` file you can simply run ``stack solver --update-config`` and it will choose the right versions for you.
 
 After that ``stack build`` will pull and install marvin for you.
+
+.. important:: 
+    Marvin uses the ``text-icu`` library for regexes.
+    It therefore requires the ``-dev`` version of the ``icu`` C library.
+
+    Linux
+        Simply install the ``-dev`` version of the icu library.
+
+        For instance ``apt install libicu-dev`` on Ubuntu.
+    
+    OSX 
+        You also need the icu library.
+        If you are using `Homebrew <homebrew>`_ you are looking for the ``icu4c`` package (``brew install icu4c``).
+        Because OSX also provides some headers you will also need to link the headers manually.
+        If you are using stack to build your projects the easiest way is to add the following lines to ``$HOME/.stack/config.yaml``.
+
+        .. code-block:: yaml
+
+            extra-include-dirs:
+                - /usr/local/opt/icu4c/include
+            extra-lib-dirs:
+                - /usr/local/opt/icu4c/lib
+        
+        alternatively you can pass the paths via ``--extra-include-dirs`` and ``extra-lib-dirs`` to the ``stack build`` and ``stack install`` command.
+
+
 
 Scripts
 -------
