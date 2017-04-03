@@ -65,15 +65,10 @@ First and foremost this block is used to add new :ref:`reactions <reacting>` to 
 
 But you can do a variety of other things here such as :ref:`define periodic tasks <periodic tasks>`, :ref:`read data <persistence on disc>` and :ref:`define mutable variables <persistence in memory>` for state tracking or data sharing.
 
-.. _reacting:
-
-Reacting
---------
-
 .. _reaction monad:
 
 The reaction Monad
-^^^^^^^^^^^^^^^^^^
+------------------
 
 ::
 
@@ -101,7 +96,7 @@ The reaction monad offers basically four different capabilities.
 
 
 Reaction functions
-^^^^^^^^^^^^^^^^^^
+------------------
 
 There are several functions for reacting to some event happening in you chat application.
 The type of reaction influences the kind of data available in the reaction handler.
@@ -129,143 +124,115 @@ The basic structure of a reaction is ``<reaction-type> <matcher> <handler>``.
     Can communicate with the chat (send messages to people or channels).
 
 
-There are currently nine reaction functions available:
+Reacting to messages
+--------------------
 
+There are two ways to react to a text message.
+A reaction defined with ``hear`` will trigger on any incoming message which matches its defined pattern (a regular expresion).
+By contrast reactions defined with ``respond`` will only trigger if the bot itslef is being adressed.
+How one adresses the bot depends on the concrete adapter.
+However typically prefixing the message with the bots name or sending a direct message (if the adapter supports this) to the bot ususally trigger these reactions.
 
-.. _fn-hear:
+In the handler that is being attached you have access to the match groups of the regex with ``getMatch``, the user who sent the message (``getUser``), the full text of the message (``getMessage``), the channel to which the message was posted (``getChannel``) and a timestamp for when the message arrived (``getTimeStamp``).
 
-``hear``
-""""""""
+The type signature for both is the same.
 
 ::
 
-    hear :: Regex -> BotReacting a (User' a, Channel' a, Match, Message, TimeStamp) () -> ScriptDefinition a ()
+    hear, respond :: Regex -> BotReacting a (User' a, Channel' a, Match, Message, TimeStamp) () -> ScriptDefinition a ()
     hear regex handler = ...
-
-``hear`` triggers on any message posted which matches the :ref:`regular expression <regex>`.
-The type of Handler is ``BotReacting a (User' a, Channel' a, Message, Match, TimeStamp) ()``, which means in addition to the :ref`normal reaction capabilities <reaction monad>` it has access to the message with the :ref:`getMessage <fn-getMessage>` function and to the regex match with :ref:`getMatch <fn-getMatch>`.
-
-Since this is a reaction to a message we additionally have can use the :ref:`send <fn-send>` function in this handler to post a message to the same channel the triggering message was posted to and also the :ref:`reply <fn-reply>` function to send a message to the sender of the original message (also posted to the same channel).
-
-
-.. _fn-respond:
-
-``respond``
-"""""""""""
-
-::
-
-    respond :: Regex -> BotReacting a (User' a, Channel' a, Match, Message, TimeStamp) () -> ScriptDefinition a ()
     respond regex handler = ...
 
-.. todo:: At some point this needs to support derivations of the name. Maybe make that configurable?
+A working example could be something like this:
 
-``respond`` triggers only on messages which are directed at the bot itself, i.e. the message starts with the name of the bot.
-The *rest* of the message is matched against the provided :ref:`regular expression <regex>` like in :ref:`hear <fn-hear>`.
+::
 
-As with :ref:`hear <fn-hear>` the match and message are available during handler execution via :ref:`getMatch <fn-getMatch>` and :ref:`getMessage <fn-getMessage>`.
+    defineScript "test" $ do
+
+        hear "\\bmarvin\\b" $ do
+            user <- getUser
+
+            send $(isL "Yes #{user^.username}, that is my name")
+        
+        respond "^\\bsudo\\b(.+)" $ do
+            match <- getMatch
+            send #(isL "I will do #{match !! 1} immediately!"
+        
+        hear ".*" $ do
+            channel <- getChannel
+            unless (channel^.name == "#nsa") $ do
+                message <- getMessage
+                messageChannel "#nsa" $(isL "Psst, this message was just posted in #{channel^.name}: #{message}")
 
 
-.. _fn-topic:
+Reacting to the topic
+---------------------
 
-``topic``
-"""""""""
+You can react to changes in the topic in two different ways.
+Using ``topic`` the handler will trigger whenever the topic in any channel changes.
+Using ``topicIn`` you can provide the name of a channel which you wish to watch for changes in the topic and the handler will only be run for changes to the topic in the specified channel.
+
+In the handler you have access to the user which triggered the change (``getUser``), the channel in which the topic was changed (``getChannel``), the new topic (``getTopic``) and a timestamp for when this change occurred (``getTimeStamp``).
 
 ::
 
     topic :: BotReacting a (User' a, Channel' a, Topic, TimeStamp) () -> ScriptDefinition a ()
     topic handler = ...
 
-``topic`` triggers whenever the topic in a channel which the bot is subscribed to changes.
-
-The new topic is available via :ref:`getTopic <fn-getTopic>`
-
-The channel in which the topic was changed is available via the :ref:`getChannel <fn-getChannel>` function.
-
-.. note:: The ``Topic`` type is just for readability, it is just an alternate name for ``Text``.
-
-
-.. _fn-topicIn:
-
-``topicIn``
-"""""""""""
-
-:: 
-
     topicIn :: Text -> BotReacting a (User' a, Channel' a, Topic, TimeStamp) () -> ScriptDefinition a ()
     topicIn channelName handler = ...
 
-Like :ref:`topic <fn-topic>` but only triggers when the topic changes in the channel with the human readable ``channelName``.
+.. note:: The ``Topic`` type is just for readability, it is just an alternate name for ``Text``.
 
+Reacting to changes in channel participants
+-------------------------------------------
 
-.. _fn-enter:
+Marvin can react both to people joining and leaving channels.
+``enter`` triggers when a user enters **any** channel in which the bot is also participating.
+``enterIn`` takes as an argument the name of a channel and ony triggers if a user joins **that** specific channel.
+``exit`` triggers when a user leaves **any** channel in which the bot is also participating.
+``exitFrom`` takes as an argument the name of a channel and ony triggers if a user leaves **that** specific channel.
 
-``enter``
-"""""""""
+All of these handlers have access to the channel which the user joined/left (``getChannel``), the user that joined/left (``getUser``) and a timestamp for when this occurred (``getTimeStamp``)
 
 ::
 
     enter :: BotReacting a (User' a, Channel' a, TimeStamp) () -> ScriptDefinition a ()
     enter handler = ...
 
-``enter`` triggers whenever a user enters in a channel which the bot is subscribed to.
-
-The entering user is available via :ref:`getUser <fn-getUser>`
-
-The channel in which user entered is available via the :ref:`getChannel <fn-getChannel>` function.
-
-
-.. _fn-enterIn:
-
-``enterIn``
-"""""""""""
-
-:: 
-
     enterIn :: Text -> BotReacting a (User' a, Channel' a, TimeStamp) () -> ScriptDefinition a ()
     enterIn channelName handler = ...
-
-Like :ref:`enter <fn-enter>` but only triggers when a user enters the channel with the human readable ``channelName``.
-
-
-.. _fn-exit:
-
-``exit``
-""""""""
-
-::
 
     exit :: BotReacting a (User' a, Channel' a, TimeStamp) () -> ScriptDefinition a ()
     exit handler = ...
 
-``exit`` triggers whenever a user exits a channel which the bot is subscribed to.
-
-The exiting user is available via :ref:`getUser <fn-getUser>`
-
-The channel from which user exited is available via the :ref:`getChannel <fn-getChannel>` function.
-
-
-.. _fn-exitIn:
-
-``exitFrom``
-""""""""""""
-
-:: 
-
     exitFrom :: Text -> BotReacting a (User' a, Channel' a, TimeStamp) () -> ScriptDefinition a ()
     exitFrom channelName handler = ...
 
-Like :ref:`exit <fn-exit>` but only triggers when a user exits the channel with the human readable ``channelName``.
+Reacting to files
+-----------------
 
-.. _functions for handlers:
+The ``fileShared`` handler is invoked any time a file is shared in **any** channel the bot is participating in.
+By contrast the ``fileSharedIn`` handler takes as its first argument a channel name and only reacts to files being shared in that channel.
 
-Functions for Handlers
-^^^^^^^^^^^^^^^^^^^^^^
+The handlers provide access to the user who shared the file (``getUser``), the channel in which the file was shared (``getChannel``), the ``RemoteFile`` object, containing information about the file being shared (``getRemoteFile``) and a timestamp for when the file was shared ``getTimeStamp``).
+
+::
+
+    fileShared :: BotReacting a (User' a, Channel' a, TimeStamp) () -> ScriptDefinition a ()
+    fileShared handler = ...
+
+    fileSharedFrom :: Text -> BotReacting a (User' a, Channel' a, TimeStamp) () -> ScriptDefinition a ()
+    fileSharedFrom channelName handler = ...
+
+
+Generic functions for handlers
+------------------------------
 
 .. _fn-send:
 
 The ``send`` function
-"""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -289,7 +256,7 @@ Explanation of the type signature:
 .. _fn-reply:
 
 The ``reply`` function 
-""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -302,7 +269,7 @@ Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the
 .. _fn-messageChannel:
 
 The ``messageChannel`` function 
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -314,7 +281,7 @@ Similar to :ref:`send <fn-send>` and :ref:`reply <fn-reply>` this functions send
 .. _fn-messageChannel':
 
 The ``messageChannel'`` function 
-""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
