@@ -258,3 +258,8 @@ Command and message events
         CTCP messages are not supported.
         All CTCP messages are currently ignored.
         However I welcome anyone who would like to try and implement some CTCP functionality.
+
+    User/channel resolving
+        This adapter does not currently keep track of existing users and channels.
+        Meaning if you try to resolve a user or channel it will always succeed by interpreting the string as channel name or user nick.
+        If you want to improve this situation you can have a look at issue `#18 <https://github.com/JustusAdam/marvin/issues/18>`__ which tracks the progress of the resolving.
