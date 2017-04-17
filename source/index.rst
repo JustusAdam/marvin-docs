@@ -45,7 +45,7 @@ A quick snippet of code
 
             send contents
         
-        enterIn "#random" $ do
+        enterIn "random" $ do
             user <- getUser
             username <- getUsername user
 
@@ -77,6 +77,7 @@ Contents:
    logging
    strings
    interpolation
+   breaking-changes
    faq
 
 

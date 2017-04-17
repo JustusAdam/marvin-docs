@@ -74,6 +74,11 @@ Slack
 
 For both of the following adapters you'll have to create a new `bot user <https://api.slack.com/bot-users>`__ for your slack team.
 
+Also for both of the following adapters you'll have to invite your bot to any channel in which it should be active (in slack) using ``/invite <botname>``.
+
+Channel references (for instance for ``enterIn`` and ``messageChannel``) for this adapter use the actual channel name *without* the ``#``. 
+For instance the channel ``#random`` is referenced only with the string ``random``.
+
 Real Time Messaging API
 ^^^^^^^^^^^^^^^^^^^^^^^
 
