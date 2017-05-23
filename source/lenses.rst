@@ -22,7 +22,7 @@ The same lenses can also be used to modify the contents of the referenced field.
 ``foo .~ value`` creates a function which sets the ``foo`` field to ``value``.
 Often this is combined with the revers application operator ``&`` to write code such as ``x & foo .~ value`` which sets ``foo`` in ``x`` to ``value``.
 Using ``&`` we can also chain modifications like so ``x & foo .~ value & anotherField .~ anotherValue``.
-This does not modify te original ``x`` but instead returns a new value of type ``Bar`` which is identical to ``x`` except for the contents of the ``foo`` field.
+This does not modify the original ``x`` but instead returns a new value of type ``Bar`` which is identical to ``x`` except for the contents of the ``foo`` field.
 
 Another operator for modification is ``%~`` where ``foo %~ f`` modifies the content of the ``foo`` field with the function ``f``.
 
