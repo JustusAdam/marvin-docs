@@ -19,6 +19,7 @@ Links
 
 A quick snippet of code
 -----------------------
+
 ::
 
     module MyScript where
@@ -31,32 +32,32 @@ A quick snippet of code
             match <- getMatch
 
             reply $(isL "All right, i'll do #{match !! 1}")
-        
+
         respond "repeat" $ do
             message <- getMessage
 
             send $(isL "You wrote #{message}")
-        
+
         respond "what is in file ([\\w\\._/-]+)\\??" $ do
-            match <- getMatch 
+            match <- getMatch
             let file = match !! 1
 
             contents <- liftIO $ readFile file
 
             send contents
-        
+
         respond "upload file ([\\w\\._/-]+)" $ do
             [_, filepath] <- getMatch
             chan <- getChannel
-            f <- sendFile filepath
+            f <- sendFile filepath [chan]
             case res of
-                Left err -> reporter $(isL "Failed to share file: #{err}")
-                Right _  -> reporter "File successfully uploaded"
-        
+                Left err -> send $(isL "Failed to share file: #{err}")
+                Right _  -> send "File successfully uploaded"
+
         enterIn "random" $ do
             user <- getUser
             send $(isL "Hello #{user^.username} welcome to the random channel!")
-        
+
         fileSharedIn "announcements" $ do
             file <- getFile
             safeFileToDir file "shared-files"
@@ -80,11 +81,12 @@ Contents:
 
    getting-started
    scripting
-   marvin-pp
-   adapters
+   abstract-data
    configuration
    external-scripts
    logging
+   marvin-pp
+   adapters
    strings
    lenses
    interpolation

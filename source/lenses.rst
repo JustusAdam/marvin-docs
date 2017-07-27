@@ -3,6 +3,17 @@
 Lens quickstart
 ===============
 
+The ``lens`` library is a clever library which brings the good parts of object oriented syntax to Haskell. 
+Namely the ability to easily access and manipulate nested data structures and.
+Marvin depends on and uses, both internally and in its interfaces, a library called `microlens`_.
+``microlens`` is very similar to `lens`_.
+It offers a smaller set of features (which suffice for marvin) but also has far fewer dependencies.
+It is however fully compatible with ``lens``, meaning a ``Lens`` value from ``microlens`` can be used as a ``Lens`` value ``lens`` as both are simply type aliases.
+So if you want to use features from ``lens`` you don't need to also use ``microlens`` to be compatible with marvin.
+
+.. _microlens: https://hackage.haskell.org/package/microlens-platform
+.. _lens: https://hackage.haskell.org/package/lens
+
 The ``Lens'`` type can be used to manipulate a field in a data structure.
 For example a lens ``foo :: Lens' Bar Int`` pertains to a field of type ``Int`` in a data structure called ``Bar``.
 

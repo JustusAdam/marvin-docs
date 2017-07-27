@@ -13,19 +13,19 @@ You can define arbitrary other values in the top level of your script, such as m
 Script boilerplate
 ------------------
 
-Since each script is a Haskell module the module name and the file name must match. 
+Since each script is a Haskell module the module name and the file name must match.
 I.e. a script module MyScript must be in a file called ``MyScript.hs``.
 Furthermore the module and file name may only contain word characters and the underscore ``_`` and must begin with an upper case letter.
 
-.. note:: 
+.. note::
     A file which starts with an underscore ``_`` or dot ``.`` is ignored by the automatic script discovery of the main file.
-    This is a way to hide unfinished scripts from being included in the program.  
+    This is a way to hide unfinished scripts from being included in the program.
 
 When you have created your source file you should first import marvins prelude ``Marvin.Prelude`` (something like marvins standard library).
 It contains all the marvin related functions you will need.
 
-.. hint:: 
-    You dont *have* to use ``Marvin.Prelude``. 
+.. hint::
+    You dont *have* to use ``Marvin.Prelude``.
     The prelude is just a convenient `collection of other modules <http://hackage.haskell.org/package/marvin-0.2.0/docs/Marvin-Prelude.html>`_, you can also import just the ones you need directly, but this is only recommended for people experienced with Haskell.
 
 ::
@@ -86,8 +86,8 @@ The reaction monad offers basically four different capabilities.
     However the readable data you get by using ``ask`` contains not only the payload which is of type ``d`` and different depending on each handler function,
     but also access to the adapter, the config and script id. And is therefore capable of
 
-#. Accessing the adapter. 
-    This enables the handler to communicate. 
+#. Accessing the adapter.
+    This enables the handler to communicate.
     Functions such as :ref:`send <fn-send>` and :ref:`messageChannel <fn-messageChannel>` can be used to send messages to the chat application.
 
 #. ``MonadLogger(IO)`` Allows you to write log messages using functions from the `monad-logger`_ package by importing ``Control.Monad.Logging``.
@@ -129,7 +129,7 @@ Reacting to messages
 
 There are two ways to react to a text message.
 A reaction defined with ``hear`` will trigger on any incoming message which matches its defined pattern (a regular expresion).
-By contrast reactions defined with ``respond`` will only trigger if the bot itslef is being adressed.
+By contrast reactions defined with ``respond`` will only trigger if the bot itself is being adressed.
 How one adresses the bot depends on the concrete adapter.
 However typically prefixing the message with the bots name or sending a direct message (if the adapter supports this) to the bot ususally trigger these reactions.
 
@@ -153,11 +153,11 @@ A working example could be something like this:
             user <- getUser
 
             send $(isL "Yes #{user^.username}, that is my name")
-        
+
         respond "^\\bsudo\\b(.+)" $ do
             match <- getMatch
             send #(isL "I will do #{match !! 1} immediately!"
-        
+
         hear ".*" $ do
             channel <- getChannel
             unless (channel^.name == "#nsa") $ do
@@ -245,17 +245,17 @@ The ``send`` function is used to post messages to the same channel from which th
 Explanation of the type signature:
 
 ``IsAdapter a``
-    We require the saved ``a`` in ``BotReacting`` to be an adapter. 
+    We require the saved ``a`` in ``BotReacting`` to be an adapter.
     This means this function actually interacts with the chat service (sends a message in this case).
 
-``Get m (Channel' a)`` 
+``Get m (Channel' a)``
     The data in the monad must have an originating ``Channel`` in it somewhere to which the message will be posted.
     This is true for most handler functions, for instance :ref:`hear <fn-hear>`, :ref:`respond <fn-respond>`, :ref:`enter <fn-enter>` all :ref:`enter <fn-enter>`, :ref:`exit <fn-exit>` and :ref:`topic <fn-topic>` handlers.
 
 
 .. _fn-reply:
 
-The ``reply`` function 
+The ``reply`` function
 ^^^^^^^^^^^^^^^^^^^^^^
 
 ::
@@ -268,7 +268,7 @@ Reply is similar to :ref:`send <fn-send>`. It posts back to the same channel the
 
 .. _fn-messageChannel:
 
-The ``messageChannel`` function 
+The ``messageChannel`` function
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
@@ -280,7 +280,7 @@ Similar to :ref:`send <fn-send>` and :ref:`reply <fn-reply>` this functions send
 
 .. _fn-messageChannel':
 
-The ``messageChannel'`` function 
+The ``messageChannel'`` function
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
@@ -356,7 +356,7 @@ The ``getUser`` function
 
     getUser :: Get m (User' a) => BotReacting a m User
 
-Usable in all handler functions which involve an acting user (most). 
+Usable in all handler functions which involve an acting user (most).
 Returns the user who triggered an event.
 
 
