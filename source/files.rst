@@ -9,7 +9,7 @@ Not all adapters support this and the individual interactions are different betw
 API 
 ---
 
-Marvin encodes its file interaction API in a separate typeclass ``HasFiles``.
+Marvin encodes its file interaction API in a separate typeclass ``SupportsFiles``.
 Adapters can opt to implement this class to support file interactions.
 The concrete structure of local and remote files and metadata differs between each adapter.
 However the API enforces certain basic rules on the data.
