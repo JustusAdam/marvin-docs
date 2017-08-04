@@ -83,6 +83,7 @@ Contents:
    scripting
    abstract-data
    configuration
+   files
    external-scripts
    logging
    marvin-pp

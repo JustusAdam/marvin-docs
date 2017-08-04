@@ -3,7 +3,7 @@
 Lens quickstart
 ===============
 
-The ``lens`` library is a clever library which brings the good parts of object oriented syntax to Haskell. 
+The ``lens`` library is a clever library which brings some useful parts of object oriented syntax to Haskell. 
 Namely the ability to easily access and manipulate nested data structures and.
 Marvin depends on and uses, both internally and in its interfaces, a library called `microlens`_.
 ``microlens`` is very similar to `lens`_.

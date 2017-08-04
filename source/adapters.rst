@@ -51,6 +51,8 @@ Shell
     | Type       | ``ShellAdapter``         |
     +------------+--------------------------+
 
+    ✅ Supports `files`_
+
 
 The simplest of all adapters, the shell adapter is used mostly for testing purposes.
 
@@ -78,6 +80,8 @@ Also for both of the following adapters you'll have to invite your bot to any ch
 
 Channel references (for instance for ``enterIn`` and ``messageChannel``) for this adapter use the actual channel name *without* the ``#``. 
 For instance the channel ``#random`` is referenced only with the string ``random``.
+
+✅ Supports `files`_
 
 Real Time Messaging API
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -151,11 +155,15 @@ Telegram
 
 Both of the following adapters require you to create and register a `telegram bot <https://core.telegram.org/bots#6-botfather>`__
 
+<<<<<<< Updated upstream
 .. admonition:: Caveats
     In telegram file size for remote files is optional.
     Since the marvin adapter class requires a ``size`` field this field will be negative if there was no size present on the file.
 
     Additionally since there is per default no ``url`` property the field will always be ``Nothing`` and setting it is a no-op.
+=======
+⚠️ Has experimental, untested support for `files`_ 
+>>>>>>> Stashed changes
 
 Poll
 ^^^^
