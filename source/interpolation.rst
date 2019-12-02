@@ -5,6 +5,17 @@ marvin-interpolate, A simple string interpolation library
 
 .. note:: The marvin interpolation library, with no dependencies on marvin itself, is separately available on `hackage <https://hackage.haskell.org/package/marvin-interpolate>`_.
 
+.. caution:: There is currently a bug in the Haskell parser for interpolated
+             expressions. For versions of this library compiled against
+             ``haskell-src-meta >= 0.8,2`` operator precedence is no longer
+             respected. This prevents mixing of non-parenthesized infix
+             operators. For instance ``$(isT "My Text
+             #{object^.field.otherField}")`` won't compile properly. This can be
+             fixed with explicit parentheses, i.e. ``$(isT "My Text
+             #{object^.(field.otherField)}")``
+
+             The tracking issue is `#4 https://github.com/JustusAdam/marvin-interpolate/issues/4`_.
+
 The marvin string interpolation library is an attempt to make it easy for the user to write text with some generated data in it.
 The design is very similar to the string interpolation in Scala and CoffeeScript, in that the hard work happens at compile time (no parsing overhead at runtime) and any valid Haskell expression can be interpolated.
 
@@ -27,7 +38,7 @@ Example:
 
     myStr = let x = "data" in $(isL "some string with #{x}: #{ 1 + 1 }")
     -- "some string with data: 2"
-    
+
 The syntax is ``$(interpolator "interpolated string")`` where interpolator is either ``isL`` or ``isT``.
 As in CoffeeScript you can use ``#{}`` to interpolate an expression.
 Any valid Haskell expression can be interpolated, it can reference both local and global bindings.
@@ -51,8 +62,8 @@ Some examples to start with:
     str1 = [iq|some string #{show $ map succ [1,2,3]} and data|]
     -- "some string [2,3,4] and data"
 
-    str2 = 
-        let 
+    str2 =
+        let
             x = "multiple"
             y = "can"
             z = "local scope"
@@ -60,7 +71,7 @@ Some examples to start with:
     -- "We can interpolate multiple bindings from local scope"
 
     str2 =
-        let 
+        let
             x = ["haskell", "expression"]
             y = " can be"
         in [iq|Any #{intercalate ' ' x ++ y} interpolated|]
@@ -94,7 +105,7 @@ As an example, from earlier, if we use a specialized interpolator we dont need t
 
     str1 = [iq|some string #{show $ map succ [1,2,3]} and data|]
     -- "some string [2,3,4] and data"
-    
+
     -- is the same as
     str2 = [iqS|some string #{map succ [1,2,3]} and data|]
 
@@ -176,7 +187,7 @@ There are a few advantages this libary has over other string formatting options.
 
 #. Type Polymorphism
 
-    The created, interpolated string has no type. 
+    The created, interpolated string has no type.
     It can be interpreted as any string type, so long as there is an `IsString <https://www.stackage.org/haddock/lts-7.14/base-4.9.0.0/Data-String.html#t:IsString>`_ instance and the expressions inside return the appropriate type.
 
     This is different format string libraries like `text-format <https://hackage.haskell.org/package/text-format>`_ and the `Text.Printf <https://www.stackage.org/haddock/lts-7.14/base-4.9.0.0/Text-Printf.html>`_ module which always produce strings of a particular type and interpolation libraries like `interpolate <http://hackage.haskell.org/package/interpolate>`_ and `interpol <http://hackage.haskell.org/package/interpol>`_ which require instances of ``Show``.
