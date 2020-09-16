@@ -3,7 +3,7 @@
 Runtime configuration
 =====================
 
-Configuration for marvin is written in the `configurator <https://hackage.haskell.com/package/configurator>`_ syntax.
+Configuration for marvin is written in the `configurator <https://hackage.haskell.org/package/configurator>`_ syntax.
 
 The configuration is read-only, aka the program does not alter the config itself.
 However the config is also auto-reload, meaning that the live system can adapt to changes in the config which are made while the system is running.
